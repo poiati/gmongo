@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" name="com.gmongo.DBTest" tests="3" time="0.037" timestamp="2010-06-06T00:22:17">
+  <properties />
+  <testcase classname="com.gmongo.DBTest" name="testGetCollecion" time="0.016" />
+  <testcase classname="com.gmongo.DBTest" name="testGetLastError" time="0.01" />
+  <testcase classname="com.gmongo.DBTest" name="testNothing" time="0.0030" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

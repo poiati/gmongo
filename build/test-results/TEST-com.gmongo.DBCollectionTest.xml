@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" name="com.gmongo.DBCollectionTest" tests="21" time="2.414" timestamp="2010-06-06T00:22:14">
+  <properties />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testInsert" time="1.53" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testInsertEmbedded" time="0.02" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testInsertEmbeddedSimpleList" time="0.065" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testInsertEmbeddedList" time="0.018" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testInsertOperator" time="0.015" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testMultipleInserts" time="0.216" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testInsertList" time="0.034" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testInsertArray" time="0.0080" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testFind" time="0.289" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testFindOne" time="0.0080" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testRename" time="0.012" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testRemove" time="0.014" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testRemoveRightShift" time="0.0070" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testSave" time="0.011" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testCount" time="0.01" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testGetFullName" time="0.014" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testUpdate" time="0.013" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testUpdateUpsert" time="0.062" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testUpdateUpsertMulti" time="0.012" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testUpdateUpsertMulti2" time="0.0090" />
+  <testcase classname="com.gmongo.DBCollectionTest" name="testNothing" time="0.0030" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

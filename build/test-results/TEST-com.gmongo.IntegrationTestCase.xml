@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" name="com.gmongo.IntegrationTestCase" tests="1" time="0.0030" timestamp="2010-06-06T00:22:17">
+  <properties />
+  <testcase classname="com.gmongo.IntegrationTestCase" name="testNothing" time="0.0010" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mongo>
+	<host>localhost</host>
+	<port>27017</port>
+	<db>gmongo_test</db>
+</mongo>
