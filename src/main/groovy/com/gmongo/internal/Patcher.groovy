@@ -15,71 +15,58 @@ limitations under the License.
 */
 package com.gmongo.internal
 
+import com.mongodb.DB
+import com.mongodb.DBCollection
 import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
-import com.mongodb.DBCollection
 
 class Patcher {
 	
-	static final PATCHED_METHODS = [ 
-		'insert', 'find', 'findOne','remove', 'save', 'count', 'update', 
-		'updateMulti'
-	]
-	static final ALIAS = 	[ 
-		leftShift : 'insert', 
-		rightShift: 'remove'
-	]
-	static final ADDITIONAL_METHODS = [
-		update: { DBObject q, DBObject o, Boolean upsert ->
-			delegate.update(q, o, upsert, false)
-		}
-	]
+	static final PATCH_MARK = '__decorated'
 	
-	static patchDb(db) {
-		db.metaClass.getProperty = { name ->
-			def c = delegate.getCollection(name)
-			patchCollection(c)
-			return c
-		}
-	}
-
-	static patchCollection(c) {
-		c.metaClass.invokeMethod = { String name, args ->
-			def nameOrAlias = ALIAS[name] ?: name
-			if (nameOrAlias in PATCHED_METHODS) {
-				_convert(args)
-				def method = c.class.metaClass.getMetaMethod(nameOrAlias, _types(args, true))
+	static _patchInternal(o, pmethods, alias=[:], addmethods=[:], afterreturn=[:]) {
+		o.metaClass.invokeMethod = { String name, args ->
+			def nameOrAlias = alias[name] ?: name
+			if (nameOrAlias in pmethods) {
+				def cargs = _convert(args)
+				def method = o.class.metaClass.getMetaMethod(nameOrAlias, _types(cargs, true))
 				if (method == null) {
-					def other = ADDITIONAL_METHODS[nameOrAlias]
+					def other = addmethods[nameOrAlias]
 					if (other != null) {
-						other.delegate = c
+						other.delegate = o
 						def largs = []
-						for (arg in args) largs << arg
+						for (arg in cargs) largs << arg
 						return other.call(largs) 
 					}
 				}
-				return method.doMethodInvoke(delegate, args)
+				def result = method.doMethodInvoke(delegate, cargs)
+				afterreturn.get(nameOrAlias)?.call(args, result)
+				return result
 			}
-			def method = c.class.metaClass.getMetaMethod(nameOrAlias, _types(args))
+			def method = o.metaClass.getMetaMethod(nameOrAlias, _types(args))
 			method.doMethodInvoke(delegate, args)
 		}
+		o.metaClass[Patcher.PATCH_MARK] = true
 	}
 	
-	private static _convert(args) {
+	static _convert(args) {
 		def size = (args instanceof List) ? args.size() : args.length
+		def convertedArgs = []
 		for (def i = 0; i < size; i++) {
 			if (args[i] instanceof List) {
-				_convert(args[i])
+				convertedArgs[i] = _convert(args[i])
 				continue
 			}
 			if ((!(args[i] instanceof Map)) || (args[i] instanceof DBObject)) {
+				convertedArgs[i] = args[i]
 				continue
 			}
-			args[i] = (args[i] as BasicDBObject)
+			convertedArgs[i] = (args[i] as BasicDBObject)
 		}
+		return ((args instanceof List) ? convertedArgs : (convertedArgs as Object[]))
 	}
 	
-	private static Object[] _types(args, handleDbObjects=false) {
+	static Object[] _types(args, handleDbObjects=false) {
 		def types = []
 		for (arg in args) {
 			if (handleDbObjects) {

@@ -2,6 +2,7 @@ package com.gmongo
 
 import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
+import com.mongodb.BasicDBList
 
 class DBCollectionTest extends IntegrationTestCase {
 	
@@ -10,9 +11,10 @@ class DBCollectionTest extends IntegrationTestCase {
 	
 	void setUp() {
 		super.setUp()
-		db = mongo.db
+		db = mongo.getDB(DB_NAME)
 		coll = db.getCollection('foo')
 		coll.drop()
+		db.justAnotherFooInTheWall.drop()
 	}
 	
 	void tearDown() {
@@ -79,7 +81,15 @@ class DBCollectionTest extends IntegrationTestCase {
 	void testFind() {
 		_insert()
 		assert !db.foo.find(key: 'Bar')
-		assert  db.foo.find(key: 'Foo').count() == 1
+		assert	db.foo.find(key: 'Foo').count() == 1
+	}
+	
+	void testFindFields() {
+		db.foo << [foo: 10, bar: 20]
+		def c = db.foo.find([:], [foo: 1])
+		def obj = c.next()
+		assertNull obj.bar
+		assertEquals 10, obj.foo 
 	}
 	
 	void testFindOne() {
@@ -92,12 +102,21 @@ class DBCollectionTest extends IntegrationTestCase {
 		assertEquals 'Foo', foo.key
 	}
 	
+	void testFindOneFields() {
+		db.foo << [foo: 10, bar: 20]
+		def obj = db.foo.findOne([:], [bar: 1])
+		assertNull obj.foo
+		assertEquals 20, obj.bar
+	}
+	
 	void testRename() {
 		_insert()
 		def another = coll.rename('justAnotherFooInTheWall')
 		assertEquals 'Foo', another.findOne().key
 		assertEquals another, db.justAnotherFooInTheWall
-		db.justAnotherFooInTheWall.drop()
+		another.insert([bar: 20])
+		assertEquals 2, another.count()
+		assert another.hasProperty(com.gmongo.internal.Patcher.PATCH_MARK)
 	}
 	
 	void testRemove() {
@@ -124,8 +143,7 @@ class DBCollectionTest extends IntegrationTestCase {
 	}
 	
 	void testCount() {
-		//TODO: Check Bug
-		//assertEquals 0, db.foo.count()
+		assertEquals 0, db.foo.count()
 		_insert()
 		assertEquals 1, db.foo.count(key: 'Foo')
 		assertEquals 1, db.foo.count()
@@ -143,8 +161,8 @@ class DBCollectionTest extends IntegrationTestCase {
 		assertEquals null, coll.findOne().updated
 		def p = [key: 'Bar'] as BasicDBObject
 		assertNull db.foo.findOne(p)
-		// TODO: WTF ?? org.codehaus.groovy.runtime.wrappers.PojoWrapper
-	    // assertNull db.foo.findOne([key: 'Bar'] as BasicDBObject)
+		// TODO: 1.7.2 BUG, test in 1.7.3
+		// assertNull db.foo.findOne([key: 'Bar'] as BasicDBObject)
 		db.foo.update([key: 'Foo'], [updated: true])
 		assertEquals true, coll.findOne().updated
 	}
@@ -179,6 +197,118 @@ class DBCollectionTest extends IntegrationTestCase {
 			times++
 		}
 		assertEquals 3, times
+	}
+	
+	void testDistinct() {
+		_insert(['Foo', 'Bar', 'Baz', 'Foo'])
+		assertEquals 4, db.foo.count()
+		assertEquals 3, db.foo.distinct('key').size()
+	}
+	
+	void testDistinctQuery() {
+		db.foo.insert([[key: 'Foo', n: 1], [key: 'Foo', n: 1], [key: 'Bar', n: 2]])
+		assertEquals 3, db.foo.count()
+		assertEquals 1, db.foo.distinct('key', [n: 1]).size()
+	}
+	
+	void testApply() {
+		def o = [k: 'foo']
+		def id = db.foo.apply(o)
+		assertEquals id, o._id
+	}
+	
+	void testCreateIndex() {
+		_insert()
+		assertEquals 1, db.foo.indexInfo.size()
+		db.foo.createIndex([key: 1])
+		assertEquals 2, db.foo.indexInfo.size()
+	}
+	
+	void testEnsureIndex() {
+		_insert()
+		assertEquals 1, db.foo.indexInfo.size()
+		db.foo.ensureIndex([key: 1])
+		assertEquals 2, db.foo.indexInfo.size()
+	}
+	
+	void testEnsureIndexOptions() {
+		_insert()
+		assertEquals 1, db.foo.indexInfo.size()
+		db.foo.ensureIndex([key: 1], [unique: true])
+		assertEquals 2, db.foo.indexInfo.size()
+		assertTrue db.foo.indexInfo[1].unique
+	}
+	
+	void testEnsureIndexName() {
+		_insert()
+		assertEquals 1, db.foo.indexInfo.size()
+		db.foo.ensureIndex([key: 1], 'fooi')
+		assertEquals 2, db.foo.indexInfo.size()
+		assertEquals 'fooi', db.foo.indexInfo[1].name
+	}
+	
+	void testEnsureIndexUniqueName() {
+		_insert()
+		assertEquals 1, db.foo.indexInfo.size()
+		db.foo.ensureIndex([key: 1], 'fooi', true)
+		assertEquals 2, db.foo.indexInfo.size()
+		assertEquals 'fooi', db.foo.indexInfo[1].name
+		assertTrue db.foo.indexInfo[1].unique
+	}
+	
+	void testDropIndexName() {
+		_insert()
+		db.foo.ensureIndex([key: 1], 'fooi', true)
+		assertEquals 2, db.foo.indexInfo.size()
+		db.foo.dropIndex("fooi")
+		assertEquals 1, db.foo.indexInfo.size()
+	}
+	
+	void testDropIndex() {
+		_insert()
+		db.foo.ensureIndex([key: 1])
+		assertEquals 2, db.foo.indexInfo.size()
+		db.foo.dropIndex([key: 1])
+		assertEquals 1, db.foo.indexInfo.size()
+	}
+	
+	void testDropIndexes() {
+		_insert()
+		db.foo.ensureIndex([key: 1])
+		assertEquals 2, db.foo.indexInfo.size()
+		db.foo.dropIndexes()
+		assertEquals 1, db.foo.indexInfo.size()
+	}
+	
+	void testDropIndexesName() {
+		_insert()
+		db.foo.ensureIndex([key: 1], 'bar')
+		assertEquals 2, db.foo.indexInfo.size()
+		db.foo.dropIndexes('bar')
+		assertEquals 1, db.foo.indexInfo.size()
+	}
+	
+	void testGetCount() {
+		_insert(['Foo', 'Bar'])
+		assertEquals 2, db.foo.getCount()
+	}
+	
+	void testGetCountQuery() {
+		_insert(['Foo', 'Bar'])
+		assertEquals 1, db.foo.getCount([key: 'Bar'])
+	}
+	
+	void testSetHintFields() {
+		_insert()
+		db.foo.setHintFields([[key: true]])
+	}
+	
+	void testGroup() {
+		db.foo.insert([[foo: 10, bar: 1, baz: 100], [foo: 20, bar: 2, baz: 200], 
+					   [foo: 10, bar: 1, baz: 300], [foo: 20, bar: 1, baz: 300]])
+		def g = db.foo.group([foo: true], [bar: 1], [count: 0], "function(obj, prev) { prev.count += obj.baz }")
+		assertEquals 400, g[0].count
+		assertEquals 300, g[1].count
 	}
 	
 	def _insert(keys=['Foo']) {

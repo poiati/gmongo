@@ -6,7 +6,7 @@ class DBCursorTest extends IntegrationTestCase {
 	
 	void setUp() {
 		super.setUp()
-		db = mongo.db
+		db = mongo.getDB(DB_NAME)
 		db.foo.drop()
 	}
 	

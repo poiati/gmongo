@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" name="com.gmongo.DBCursorTest" tests="3" time="0.039" timestamp="2010-06-06T00:22:17">
+<testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" name="com.gmongo.DBCursorTest" tests="3" time="0.031" timestamp="2010-06-19T23:35:55">
   <properties />
-  <testcase classname="com.gmongo.DBCursorTest" name="testIteration" time="0.011" />
-  <testcase classname="com.gmongo.DBCursorTest" name="testEach" time="0.012" />
-  <testcase classname="com.gmongo.DBCursorTest" name="testNothing" time="0.012" />
+  <testcase classname="com.gmongo.DBCursorTest" name="testIteration" time="0.012" />
+  <testcase classname="com.gmongo.DBCursorTest" name="testEach" time="0.011" />
+  <testcase classname="com.gmongo.DBCursorTest" name="testNothing" time="0.0070" />
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

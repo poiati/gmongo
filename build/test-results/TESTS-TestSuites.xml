@@ -1,109 +1,173 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="0" name="DBCollectionTest" package="com.gmongo" tests="21" time="2.414" timestamp="2010-06-06T00:22:14">
+  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="0" name="DBCollectionTest" package="com.gmongo" tests="39" time="0.998" timestamp="2010-06-19T23:35:54">
       <properties />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testInsert" time="1.53" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testInsert" time="0.359" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertEmbedded" time="0.02" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertEmbedded" time="0.013" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertEmbeddedSimpleList" time="0.065" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertEmbeddedSimpleList" time="0.019" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertEmbeddedList" time="0.018" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertEmbeddedList" time="0.014" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertOperator" time="0.015" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertOperator" time="0.011" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testMultipleInserts" time="0.216" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testMultipleInserts" time="0.037" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertList" time="0.034" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertList" time="0.045" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertArray" time="0.0080" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testInsertArray" time="0.015" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testFind" time="0.289" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testFind" time="0.013" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testFindOne" time="0.0080" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testFindFields" time="0.01" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testRename" time="0.012" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testFindOne" time="0.011" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testRemove" time="0.014" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testFindOneFields" time="0.01" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testRemoveRightShift" time="0.0070" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testRename" time="0.011" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testSave" time="0.011" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testRemove" time="0.022" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testCount" time="0.01" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testRemoveRightShift" time="0.078" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testGetFullName" time="0.014" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testSave" time="0.012" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testUpdate" time="0.013" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testCount" time="0.033" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testUpdateUpsert" time="0.062" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testGetFullName" time="0.0080" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testUpdateUpsertMulti" time="0.012" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testUpdate" time="0.0090" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testUpdateUpsertMulti2" time="0.0090" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testUpdateUpsert" time="0.011" />
 
-      <testcase classname="com.gmongo.DBCollectionTest" name="testNothing" time="0.0030" />
+      <testcase classname="com.gmongo.DBCollectionTest" name="testUpdateUpsertMulti" time="0.013" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testUpdateUpsertMulti2" time="0.013" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testDistinct" time="0.011" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testDistinctQuery" time="0.01" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testApply" time="0.0050" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testCreateIndex" time="0.01" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testEnsureIndex" time="0.0090" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testEnsureIndexOptions" time="0.02" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testEnsureIndexName" time="0.01" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testEnsureIndexUniqueName" time="0.014" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testDropIndexName" time="0.015" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testDropIndex" time="0.01" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testDropIndexes" time="0.01" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testDropIndexesName" time="0.0090" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testGetCount" time="0.0070" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testGetCountQuery" time="0.0080" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testSetHintFields" time="0.0060" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testGroup" time="0.025" />
+
+      <testcase classname="com.gmongo.DBCollectionTest" name="testNothing" time="0.0090" />
 
       <system-out><![CDATA[]]></system-out>
 
       <system-err><![CDATA[]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="1" name="DBCursorTest" package="com.gmongo" tests="3" time="0.039" timestamp="2010-06-06T00:22:17">
+  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="1" name="DBCursorTest" package="com.gmongo" tests="3" time="0.031" timestamp="2010-06-19T23:35:55">
       <properties />
 
-      <testcase classname="com.gmongo.DBCursorTest" name="testIteration" time="0.011" />
+      <testcase classname="com.gmongo.DBCursorTest" name="testIteration" time="0.012" />
 
-      <testcase classname="com.gmongo.DBCursorTest" name="testEach" time="0.012" />
+      <testcase classname="com.gmongo.DBCursorTest" name="testEach" time="0.011" />
 
-      <testcase classname="com.gmongo.DBCursorTest" name="testNothing" time="0.012" />
+      <testcase classname="com.gmongo.DBCursorTest" name="testNothing" time="0.0070" />
 
       <system-out><![CDATA[]]></system-out>
 
       <system-err><![CDATA[]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="2" name="DBTest" package="com.gmongo" tests="3" time="0.037" timestamp="2010-06-06T00:22:17">
+  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="2" name="DBTest" package="com.gmongo" tests="10" time="0.034" timestamp="2010-06-19T23:35:55">
       <properties />
 
-      <testcase classname="com.gmongo.DBTest" name="testGetCollecion" time="0.016" />
+      <testcase classname="com.gmongo.DBTest" name="testGetCollection" time="0.0020" />
 
-      <testcase classname="com.gmongo.DBTest" name="testGetLastError" time="0.01" />
+      <testcase classname="com.gmongo.DBTest" name="testGetCollectionFromFull" time="0.0020" />
 
-      <testcase classname="com.gmongo.DBTest" name="testNothing" time="0.0030" />
+      <testcase classname="com.gmongo.DBTest" name="testGetCollectionFromString" time="0.0020" />
+
+      <testcase classname="com.gmongo.DBTest" name="testGetCollecionGroovy" time="0.0040" />
+
+      <testcase classname="com.gmongo.DBTest" name="testGetLastError" time="0.0020" />
+
+      <testcase classname="com.gmongo.DBTest" name="testExecuteCommand" time="0.0020" />
+
+      <testcase classname="com.gmongo.DBTest" name="testExecuteCommandString" time="0.0020" />
+
+      <testcase classname="com.gmongo.DBTest" name="testInRequestMock" time="0.0080" />
+
+      <testcase classname="com.gmongo.DBTest" name="testInRequest" time="0.0060" />
+
+      <testcase classname="com.gmongo.DBTest" name="testNothing" time="0.0010" />
 
       <system-out><![CDATA[]]></system-out>
 
       <system-err><![CDATA[]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="3" name="IntegrationTestCase" package="com.gmongo" tests="1" time="0.0030" timestamp="2010-06-06T00:22:17">
+  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="3" name="GMongoTest" package="com.gmongo" tests="4" time="0.017" timestamp="2010-06-19T23:35:55">
       <properties />
 
-      <testcase classname="com.gmongo.IntegrationTestCase" name="testNothing" time="0.0010" />
+      <testcase classname="com.gmongo.GMongoTest" name="testGetDbGroovy" time="0.0080" />
+
+      <testcase classname="com.gmongo.GMongoTest" name="testGetDb" time="0.0020" />
+
+      <testcase classname="com.gmongo.GMongoTest" name="testStaticConnect" time="0.0030" />
+
+      <testcase classname="com.gmongo.GMongoTest" name="testNothing" time="0.0010" />
 
       <system-out><![CDATA[]]></system-out>
 
       <system-err><![CDATA[]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="4" name="MongoTest" package="com.gmongo" tests="2" time="0.0060" timestamp="2010-06-06T00:22:17">
+  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="4" name="IntegrationTestCase" package="com.gmongo" tests="1" time="0.0010" timestamp="2010-06-19T23:35:55">
       <properties />
 
-      <testcase classname="com.gmongo.MongoTest" name="testGetDb" time="0.0010" />
-
-      <testcase classname="com.gmongo.MongoTest" name="testNothing" time="0.0010" />
+      <testcase classname="com.gmongo.IntegrationTestCase" name="testNothing" time="0.0" />
 
       <system-out><![CDATA[]]></system-out>
 
       <system-err><![CDATA[]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="5" name="UsageTest" package="com.gmongo" tests="1" time="3.691" timestamp="2010-06-06T00:22:17">
+  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="5" name="MapReduceTest" package="com.gmongo" tests="1" time="5.296" timestamp="2010-06-19T23:35:55">
       <properties />
 
-      <testcase classname="com.gmongo.UsageTest" name="testUsage" time="3.69" />
+      <testcase classname="com.gmongo.MapReduceTest" name="testMapReduce" time="5.294" />
+
+      <system-out><![CDATA[]]></system-out>
+
+      <system-err><![CDATA[]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" id="6" name="UsageTest" package="com.gmongo" tests="1" time="1.938" timestamp="2010-06-19T23:36:00">
+      <properties />
+
+      <testcase classname="com.gmongo.UsageTest" name="testUsage" time="1.937" />
 
       <system-out><![CDATA[]]></system-out>
 
