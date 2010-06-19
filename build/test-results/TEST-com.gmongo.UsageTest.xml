@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="paulo-gabriel-lopes-poiatis-imac-2.local" name="com.gmongo.UsageTest" tests="1" time="1.938" timestamp="2010-06-19T23:36:00">
-  <properties />
-  <testcase classname="com.gmongo.UsageTest" name="testUsage" time="1.937" />
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
