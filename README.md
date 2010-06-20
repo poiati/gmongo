@@ -2,11 +2,11 @@
 
 The goal of this project is to provide a more simple, easy to use and less verbose API to work with mongodb using the Groovy programming language.
 
-More information can be found here: http://blog.paulopoiati.com
+More information can be found here: http://blog.paulopoiati.com.
 
 # Support
 
-Any bug, suggestion or ... whatever
+Any bug, suggestion or ... whatever.
 
 Email: paulogpoiati@gmail.com
 
@@ -118,8 +118,7 @@ Email: paulogpoiati@gmail.com
 
 # Build
 				
-The project is build using gradle
-Gradle can be found in: http://www.gradle.org
+The project is build using gradle. Gradle can be found in: http://www.gradle.org
 				
 # Test
 				
