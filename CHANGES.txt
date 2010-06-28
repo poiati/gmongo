@@ -1,0 +1,2 @@
+- v0.6
+	* Collections truth. Empty collections are evaluated to false and non empty are evaluated to true in logical expression

@@ -311,6 +311,13 @@ class DBCollectionTest extends IntegrationTestCase {
 		assertEquals 300, g[1].count
 	}
 	
+	void testCollectionTruth() {
+		if (db.foo) assert false
+		_insert()
+		if (db.foo) return
+		assert false
+	}
+	
 	def _insert(keys=['Foo']) {
 		keys.each {
 			coll.insert([key: it] as BasicDBObject)

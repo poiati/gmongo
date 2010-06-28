@@ -46,6 +46,7 @@ class DBCollectionPatcher {
 	static patch(c) {
 		if (c.hasProperty(Patcher.PATCH_MARK))
 			return
+		c.metaClass.asBoolean { -> delegate.count() > 0 }
 		Patcher._patchInternal c, PATCHED_METHODS, ALIAS, ADDITIONAL_METHODS, AFTER_RETURN
 	}
 }

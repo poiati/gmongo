@@ -1,5 +1,6 @@
 package com.gmongo
 
+//TODO: Update to 0.6
 class UsageTest extends GroovyTestCase {
 	
 	void testUsage() {

@@ -1,5 +1,7 @@
 package com.gmongo
 
+import java.util.Random as Rand
+
 class MapReduceTest extends GroovyTestCase {
 	
 	void testMapReduce() {
@@ -8,7 +10,7 @@ class MapReduceTest extends GroovyTestCase {
 		def db = mongo.getDB("gmongo")
 		
 		def words = ['foo', 'bar', 'baz']
-		def rand  = new Random()		
+		def rand  = new Rand()		
 
 		1000.times { 
 			db.words << [word: words[rand.nextInt(3)]]
@@ -38,11 +40,12 @@ class MapReduceTest extends GroovyTestCase {
 		assert db.mrresult.find()*.value*.count.sum() == 1000
 	}
 	
+	
 	void setUp() {
-		new GMongo().dropDatabase()
+		new GMongo().getDB("gmongo").dropDatabase()
 	}
 	
 	void tearDown() {
-		new GMongo().dropDatabase()
+		new GMongo().getDB("gmongo").dropDatabase()
 	}
 }
