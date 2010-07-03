@@ -13,6 +13,7 @@ class DBTest extends IntegrationTestCase {
 	void setUp() {
 		super.setUp()
 		db = mongo.getDB(DB_NAME)
+		db.dropDatabase()
 	}
 	
 	void testGetCollection() {
@@ -65,6 +66,17 @@ class DBTest extends IntegrationTestCase {
 			// Do something consistently
 		}
 		assertTrue started && ended
+	}
+	
+	void testCollectionExists() {
+		assertFalse db.collectionExists('baz')
+		db.baz.insert(foo: 10)
+		assertTrue db.collectionExists('baz')
+	}
+	
+	void testCreateCollection() {
+		def c = db.createCollection("foo", [capped: true, size: 100000])
+		assert c.hasProperty(Patcher.PATCH_MARK)
 	}
 	
 	void testInRequest() {

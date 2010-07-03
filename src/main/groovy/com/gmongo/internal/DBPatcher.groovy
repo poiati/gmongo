@@ -17,7 +17,13 @@ package com.gmongo.internal
 
 class DBPatcher {
 	
-	static final PATCHED_METHODS = [ 'command' ]
+	static final PATCHED_METHODS = [ 'command', 'createCollection' ]
+	
+	static final AFTER_RETURN = [
+		createCollection: { defaultArgs, result ->
+			DBCollectionPatcher.patch result
+		}
+	]
 	
 	static patch(db) {
 		if (db.hasProperty(Patcher.PATCH_MARK)) return
@@ -41,7 +47,7 @@ class DBPatcher {
 				delegate.requestDone()
 			}
 		}
-		Patcher._patchInternal db, PATCHED_METHODS
+		Patcher._patchInternal db, PATCHED_METHODS, [:], [:], AFTER_RETURN
 	}
 	
 	private static _patchedCollection(c) {
