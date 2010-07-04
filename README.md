@@ -11,7 +11,9 @@ Any bug, suggestion or ... whatever.
 Email: paulogpoiati@gmail.com
 
 # Usage
-
+	// To download GMongo on the fly and put it at classpath
+	@Grab(group='com.gmongo', module='gmongo', version='0.5.1')
+	import com.gmongo.GMongo
 	// Instantiate a com.gmongo.GMongo object instead of com.mongodb.Mongo
 	// The same constructors and methods are available here
 	def mongo = new GMongo()
@@ -82,7 +84,9 @@ Email: paulogpoiati@gmail.com
 	}
 	
 ## MapReduce
-
+	@Grab(group='com.gmongo', module='gmongo', version='0.5.1')
+	import com.gmongo.GMongo
+	
 	def mongo = new GMongo()
 	def db = mongo.getDB("gmongo")
 	
