@@ -43,8 +43,11 @@ class DBPatcher {
 			}
 			inRequest = { Closure lambda ->
 				delegate.requestStart()
-				lambda.call()
-				delegate.requestDone()
+				try {
+				    lambda.call()
+				} finally {
+				    delegate.requestDone()
+				}
 			}
 		}
 		Patcher._patchInternal db, PATCHED_METHODS, [:], [:], AFTER_RETURN

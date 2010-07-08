@@ -68,6 +68,20 @@ class DBTest extends IntegrationTestCase {
 		assertTrue started && ended
 	}
 	
+	void testInRequestMockException() {
+		def started, ended = false
+		db.metaClass.requestStart { started = true }
+		db.metaClass.requestDone  { ended = true }
+		try {
+		    db.inRequest {->
+			    throw new RuntimeException("Opss!!!")
+		    }
+	    } catch (RuntimeException ex) {
+	        assertEquals "Opss!!!", ex.message
+	    }
+		assertTrue started && ended
+	}
+	
 	void testCollectionExists() {
 		assertFalse db.collectionExists('baz')
 		db.baz.insert(foo: 10)

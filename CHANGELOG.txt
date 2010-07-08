@@ -1,5 +1,8 @@
 * 0.6
 	- Collections truth. Empty collections are evaluated to false and non empty are evaluated to true in logical expression
 
+* 0.5 Nightly
+	- Improved error handling in com.mongodb.DB#inRequest (now this method calls com.mongodb.DB#requestDone even if the closure throws an exception)
+
 * 0.5.1
 	- Fixed a bug with com.mongodb.DB#createCollection
