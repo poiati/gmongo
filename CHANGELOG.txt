@@ -1,2 +1,5 @@
+* 0.6
+	- Collections truth. Empty collections are evaluated to false and non empty are evaluated to true in logical expression
+
 * 0.5.1
 	- Fixed a bug with com.mongodb.DB#createCollection
