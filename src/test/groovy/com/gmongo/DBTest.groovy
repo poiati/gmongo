@@ -91,6 +91,21 @@ class DBTest extends IntegrationTestCase {
 	void testCreateCollection() {
 		def c = db.createCollection("foo", [capped: true, size: 100000])
 		assert c.hasProperty(Patcher.PATCH_MARK)
+	    assert db.foo.hasProperty(Patcher.PATCH_MARK)
+	}
+	
+	void testMissingMethod() {
+	    def msg = shouldFail(MissingMethodException) {
+	        db.foo()
+	    }
+	    
+	    def msg2 = shouldFail(MissingMethodException) {
+	        db.foo('bar')
+	    }
+	    
+	    assert msg.contains("foo")
+	    assert msg2.contains("foo")
+	    assert msg2.contains("bar")
 	}
 	
 	void testInRequest() {

@@ -1,5 +1,7 @@
 package com.gmongo
 
+import com.gmongo.internal.Patcher
+
 import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
 import com.mongodb.BasicDBList
@@ -316,6 +318,24 @@ class DBCollectionTest extends IntegrationTestCase {
 		_insert()
 		if (db.foo) return
 		assert false
+	}
+	
+	void testMissingMethod() {
+	    def msg = shouldFail(MissingMethodException) {
+	        db.foo()
+	    }
+	    
+	    def msg2 = shouldFail(MissingMethodException) {
+	        db.fooBar([:])
+	    }
+	    
+	    assert msg.contains("foo")
+	    assert msg2.contains("fooBar")
+	}
+	
+	void testGetDB() {
+	    def _db = db.foo.getDB()
+	    assert _db.hasProperty(Patcher.PATCH_MARK)
 	}
 	
 	def _insert(keys=['Foo']) {

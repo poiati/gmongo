@@ -44,6 +44,8 @@ class Patcher {
 				return result
 			}
 			def method = o.metaClass.getMetaMethod(nameOrAlias, _types(args))
+			if (!method)
+			    throw new MissingMethodException(name, o.class, args)
 			method.doMethodInvoke(delegate, args)
 		}
 		o.metaClass[Patcher.PATCH_MARK] = true
