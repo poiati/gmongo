@@ -49,13 +49,13 @@ class DBTest extends IntegrationTestCase {
 	void testExecuteCommand() {
 		def result = db.command([ismaster: 1])
 		assertTrue result.ok()
-		assertEquals 1, result.ismaster
+		assertEquals true, result.ismaster
 	}
 	
 	void testExecuteCommandString() {
 		def result = db.command('ismaster')
 		assertTrue result.ok()
-		assertEquals 1, result.ismaster
+		assertEquals true, result.ismaster
 	}
 	
 	void testInRequestMock() {
