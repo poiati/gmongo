@@ -321,16 +321,23 @@ class DBCollectionTest extends IntegrationTestCase {
 	}
 	
 	void testMissingMethod() {
+	    
 	    def msg = shouldFail(MissingMethodException) {
-	        db.foo()
+	        db.fooBar.blabla([baz: "foo"])
 	    }
 	    
 	    def msg2 = shouldFail(MissingMethodException) {
-	        db.fooBar([:])
+	        db.fooBar.bla("foo")
 	    }
 	    
-	    assert msg.contains("foo")
-	    assert msg2.contains("fooBar")
+	    def msg3 = shouldFail(MissingMethodException) {
+	        db.fooBar.insert("bar")
+	    }
+	    
+	    assert msg.contains("blabla")
+	    assert msg2.contains("bla")
+	    assert msg3.contains("insert")
+	    assert msg3.contains("String")
 	}
 	
 	void testGetDB() {
