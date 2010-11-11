@@ -1,3 +1,5 @@
+
+
 /*
 Copyright 2010 Paulo Poiati
 
@@ -15,11 +17,13 @@ limitations under the License.
 */
 package com.gmongo
 
+import java.util.List;
+
+import com.mongodb.MongoOptions
+import com.mongodb.ServerAddress
 import com.mongodb.Mongo
 import com.mongodb.DB
-import com.mongodb.ServerAddress
 import com.mongodb.DBAddress
-import com.mongodb.MongoOptions
 
 import com.gmongo.internal.DBPatcher
 
@@ -32,36 +36,48 @@ class GMongo {
 		patchAndReturn Mongo.connect(addr)
 	}
 	
+	GMongo(Mongo mongo) {
+		this.mongo = mongo
+	}
+	
 	GMongo() {
-		mongo = new Mongo()
+		this.mongo = new Mongo()
 	}
 	
 	GMongo(ServerAddress addr) {
-		mongo = new Mongo(addr)
+		this.mongo = new Mongo(addr)
 	}
 	
 	GMongo(ServerAddress addr, MongoOptions opts) {
-		mongo = new Mongo(addr, opts)
+		this.mongo = new Mongo(addr, opts)
 	}
 	
 	GMongo(ServerAddress left, ServerAddress right) {
-		mongo = new Mongo(left, right)
+		this.mongo = new Mongo(left, right)
 	}
 	
 	GMongo(ServerAddress left, ServerAddress right, MongoOptions opts) {
-		mongo = new Mongo(left, right, opts)
+		this.mongo = new Mongo(left, right, opts)
 	}
 	
 	GMongo(String host) {
-		mongo = new Mongo(host)
+		this.mongo = new Mongo(host)
 	}
 	
 	GMongo(String host, Integer port) {
-		mongo = new Mongo(host, port)
+		this.mongo = new Mongo(host, port)
 	}
 	
 	GMongo(String host, MongoOptions opts) {
-		mongo = new Mongo(host, opts)
+		this.mongo = new Mongo(host, opts)
+	}
+	
+	GMongo( List<ServerAddress> replicaSetSeeds, MongoOptions options ) {
+		this.mongo = new Mongo(replicaSetSeeds, opts)
+	}
+	
+	GMongo( List<ServerAddress> replicaSetSeeds) {
+		this.mongo = new Mongo(replicaSetSeeds)
 	}
 	
 	DB getDB(String name) {
