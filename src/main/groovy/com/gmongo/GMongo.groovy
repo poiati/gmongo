@@ -1,5 +1,3 @@
-
-
 /*
 Copyright 2010 Paulo Poiati
 
