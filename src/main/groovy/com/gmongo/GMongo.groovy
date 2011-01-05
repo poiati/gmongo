@@ -70,7 +70,7 @@ class GMongo {
 		this.mongo = new Mongo(host, opts)
 	}
 	
-	GMongo( List<ServerAddress> replicaSetSeeds, MongoOptions options ) {
+	GMongo( List<ServerAddress> replicaSetSeeds, MongoOptions opts ) {
 		this.mongo = new Mongo(replicaSetSeeds, opts)
 	}
 	
