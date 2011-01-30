@@ -1,11 +1,11 @@
 * 0.6
-	- Collections truth. Empty collections are evaluated to false and non empty are evaluated to true in logical expression
-	- Better internal error handling
-	- Changed mongo-java-driver to version 2.1
-	- Changed Groovy version to 1.7.4
+  - Collections truth. Empty collections are evaluated to false and non empty are evaluated to true in logical expression
+  - Better internal error handling
+  - Changed mongo-java-driver to version 2.1
+  - Changed Groovy version to 1.7.4
 
 * 0.5 Nightly
-	- Improved error handling in com.mongodb.DB#inRequest (now this method calls com.mongodb.DB#requestDone even if the closure throws an exception)
+  - Improved error handling in com.mongodb.DB#inRequest (now this method calls com.mongodb.DB#requestDone  even if the closure throws an exception)
 
 * 0.5.1
-	- Fixed a bug with com.mongodb.DB#createCollection
+  - Fixed a bug with com.mongodb.DB#createCollection

@@ -7,65 +7,65 @@ version = '0.6'
 artifact = 'gmongo'
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-	groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.7.6'
-	compile group: 'org.mongodb', name: 'mongo-java-driver', version: '2.4'
-	testCompile group: 'junit', name: 'junit', version: '4.8.2'
+  groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.7.6'
+  compile group: 'org.mongodb', name: 'mongo-java-driver', version: '2.4'
+  testCompile group: 'junit', name: 'junit', version: '4.8.2'
 }
 
 task source << {
-	ant.jar(destfile: "$buildDir/$artifact-${version}-sources.jar") {
-		fileset (dir: 'src/main/groovy', includes: '**/*.groovy')
-	}
+  ant.jar(destfile: "$buildDir/$artifact-${version}-sources.jar") {
+    fileset (dir: 'src/main/groovy', includes: '**/*.groovy')
+  }
 }
 
 task bundle(dependsOn: [ 'build', 'source', 'groovydoc', 'pom' ]) << {
-	def bundleDir = "$buildDir/bundle"
-	ant.copy(file: "$buildDir/libs/$artifact-${version}.jar", todir: bundleDir)
-	ant.copy(file: "$buildDir/$artifact-$version-sources.jar", todir: bundleDir)
-	ant.copy(file: "$buildDir/pom.xml", todir: bundleDir)
-	ant.jar(destfile: "$bundleDir/$artifact-$version-javadoc.jar") {
-		fileset (dir: "$buildDir/docs/groovydoc")
-	}
-	new File(bundleDir).eachFile {
-		gpgSign it.absolutePath
-	}
-	ant.jar(destfile: "$bundleDir/$artifact-$version-bundle.jar", basedir: bundleDir)
+  def bundleDir = "$buildDir/bundle"
+  ant.copy(file: "$buildDir/libs/$artifact-${version}.jar", todir: bundleDir)
+  ant.copy(file: "$buildDir/$artifact-$version-sources.jar", todir: bundleDir)
+  ant.copy(file: "$buildDir/pom.xml", todir: bundleDir)
+  ant.jar(destfile: "$bundleDir/$artifact-$version-javadoc.jar") {
+    fileset (dir: "$buildDir/docs/groovydoc")
+  }
+  new File(bundleDir).eachFile {
+    gpgSign it.absolutePath
+  }
+  ant.jar(destfile: "$bundleDir/$artifact-$version-bundle.jar", basedir: bundleDir)
 }
 
 task pom << {
-	pom {
-		project {
-			name artifact
-			description 'Mongodb for Groovy'
-			url 'http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/'
-			licenses {
-				license {
-					name 'The Apache Software License, Version 2.0'
-					url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-					distribution 'repo'
-				}
-			}
-			scm {
-				url 'http://github.com/poiati/gmongo'
-			}
-			developers {
-				developer {
-					name 'Paulo Poiati'
-					email 'paulogpoiati@gmail.com'
-					url 'http://blog.paulopoiati.com'
-				}
-			}
-		}
-	}.writeTo("$buildDir/pom.xml")
+  pom {
+    project {
+      name artifact
+      description 'Mongodb for Groovy'
+      url 'http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/'
+      licenses {
+        license {
+          name 'The Apache Software License, Version 2.0'
+          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          distribution 'repo'
+        }
+      }
+      scm {
+        url 'http://github.com/poiati/gmongo'
+      }
+      developers {
+        developer {
+          name 'Paulo Poiati'
+          email 'paulogpoiati@gmail.com'
+          url 'http://blog.paulopoiati.com'
+        }
+      }
+    }
+  }.writeTo("$buildDir/pom.xml")
 }
 
 def gpgSign(file) {
-	def passphrase = System.properties['gpg.passphrase']
-	if (!passphrase) 
-		throw new RuntimeException("\nEnter your gpg passphrase. Ex: -Dgpg.passphrase=foo")
-	"gpg -ab --passphrase=$passphrase $file".execute()
+  def passphrase = System.properties['gpg.passphrase']
+  if (!passphrase) 
+    throw new RuntimeException("\nEnter your gpg passphrase. Ex: -Dgpg.passphrase=foo")
+  "gpg -ab --passphrase=$passphrase $file".execute()
 }
