@@ -33,7 +33,7 @@ class Patcher {
         if (method == null) {
           def other = addmethods[nameOrAlias]
           if (other == null)
-          throw new MissingMethodException(name, o.class, args)
+            throw new MissingMethodException(name, o.class, args)
           other.delegate = o
           def largs = []
           for (arg in cargs) largs << arg
@@ -45,8 +45,10 @@ class Patcher {
       }
       def method = o.metaClass.getMetaMethod(nameOrAlias, _types(args))
       if (!method)
-      throw new MissingMethodException(name, o.class, args)
-      method.doMethodInvoke(delegate, args)
+        throw new MissingMethodException(name, o.class, args)
+      def result = method.doMethodInvoke(delegate, args)
+      afterreturn.get(nameOrAlias)?.call(args, result)
+      return result
     }
     o.metaClass[Patcher.PATCH_MARK] = true
   }

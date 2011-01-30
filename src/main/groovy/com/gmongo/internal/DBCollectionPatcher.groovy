@@ -40,13 +40,20 @@ class DBCollectionPatcher {
   static final AFTER_RETURN = [
     apply: { defaultArgs, result ->
       defaultArgs[0]._id = result
+    },
+    find: { defaultArgs, result ->
+      DBCursorPatcher.patch(result)
     }
   ]
 
   static patch(c) {
     if (c.hasProperty(Patcher.PATCH_MARK))
       return
-    c.metaClass.asBoolean { -> delegate.count() > 0 }
+    addCollectionTruth(c)
     Patcher._patchInternal c, PATCHED_METHODS, ALIAS, ADDITIONAL_METHODS, AFTER_RETURN
+  }
+  
+  private static addCollectionTruth(c) {
+    c.metaClass.asBoolean { -> delegate.count() > 0 }
   }
 }
