@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'eclipse'
 
 group = 'com.gmongo'
-version = '0.6'
+version = '0.7'
 artifact = 'gmongo'
 
 repositories {
