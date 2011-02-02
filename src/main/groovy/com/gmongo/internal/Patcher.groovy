@@ -61,13 +61,39 @@ class Patcher {
         convertedArgs[i] = _convert(args[i])
         continue
       }
-      if ((!(args[i] instanceof Map)) || (args[i] instanceof DBObject)) {
+      if (!(args[i] instanceof Map) || (args[i] instanceof DBObject)) {
+        _converAllCharSeqToString(args[i])
         convertedArgs[i] = args[i]
         continue
       }
+      _converAllCharSeqToString(args[i])
       convertedArgs[i] = (args[i] as BasicDBObject)
     }
     return ((args instanceof List) ? convertedArgs : (convertedArgs as Object[]))
+  }
+  
+  static _converAllCharSeqToString(map) {    
+    map.each { entry ->
+      def val = entry.value
+      if (val instanceof List) {
+        val.eachWithIndex { element, i ->
+          if (element instanceof CharSequence) {
+            val[i] = element.toString()
+            return
+          }
+          if (element instanceof Map) {
+            _converAllCharSeqToString(element)
+          }
+        }
+      }
+      if (val instanceof CharSequence) {
+        map.put(entry.key, val.toString())
+        return
+      }
+      if (val instanceof Map) {
+        _converAllCharSeqToString(val)
+      } 
+    }
   }
 
   static Object[] _types(args, handleDbObjects=false) {

@@ -28,11 +28,23 @@ class DBCollectionTest extends IntegrationTestCase {
     assert db.foo.count() == 1
     assert coll.findOne().bar == 1
   }
+  
+  void testInsertGString() {
+    db.foo.insert([bar: "${1 + 1}"])
+    assert db.foo.count() == 1
+    assert coll.findOne().bar == "2"
+  }
 
   void testInsertEmbedded() {
     db.foo.insert([bar: [foo: 1]])
     assert db.foo.count() == 1
     assert coll.findOne().bar.foo == 1
+  }
+  
+  void testInsertEmbeddedGString() {
+    db.foo.insert([bar: [foo: "${1 + 1}"]])
+    assert db.foo.count() == 1
+    assert coll.findOne().bar.foo == "2"
   }
 
   void testInsertEmbeddedSimpleList() {
@@ -42,6 +54,15 @@ class DBCollectionTest extends IntegrationTestCase {
     assert coll.findOne().bar[1] == 'baz'
     assert coll.findOne().bar[2] == 1
   }
+  
+  void testInsertEmbeddedSimpleListGString() {
+    db.foo.insert(bar: ['foo', 'baz', 1, "${1 + 1}"])
+    assert db.foo.count() == 1
+    assert coll.findOne().bar[0] == 'foo'
+    assert coll.findOne().bar[1] == 'baz'
+    assert coll.findOne().bar[2] == 1
+    assert coll.findOne().bar[3] == "2"
+  }
 
   void testInsertEmbeddedList() {
     db.foo.insert([bar: [[foo: 1], [baz: 2]]])
@@ -50,6 +71,16 @@ class DBCollectionTest extends IntegrationTestCase {
     assert coll.findOne().bar.get(1).baz == 2
     assert coll.findOne().bar[0].foo == 1
     assert coll.findOne().bar[1].baz == 2
+  }
+  
+  void testInsertEmbeddedListGString() {
+    db.foo.insert([bar: [[foo: 1], [baz: 2], [zoo: "${1 + 1}"]]])
+    assert db.foo.count() == 1
+    assert coll.findOne().bar.get(0).foo == 1
+    assert coll.findOne().bar.get(1).baz == 2
+    assert coll.findOne().bar[0].foo == 1
+    assert coll.findOne().bar[1].baz == 2
+    assert coll.findOne().bar[2].zoo == "2"
   }
 
   void testInsertOperator() {
@@ -71,6 +102,11 @@ class DBCollectionTest extends IntegrationTestCase {
     db.foo.insert([[key: 1], [key: 2], [foo: 'bar']])
     assertEquals 3, db.foo.count()
   }
+  
+  void testInsertListGString() {
+    db.foo.insert([[key: "${1 + 1}"], [key: "${2 + 2}"], [foo: 'bar']])
+    assertEquals 3, db.foo.count()
+  }
 
   void testInsertArray() {
     DBObject[] objs = new DBObject[2]
@@ -85,13 +121,19 @@ class DBCollectionTest extends IntegrationTestCase {
     assert !db.foo.find(key: 'Bar')
     assert	db.foo.find(key: 'Foo').count() == 1
   }
+  
+  void testFindGString() {
+    _insert()
+    assert !db.foo.find(key: "${'Bar'}")
+    assert	db.foo.find(key: "${'Foo'}").count() == 1
+  }
 
   void testFindFields() {
     db.foo << [foo: 10, bar: 20]
     def c = db.foo.find([:], [foo: 1])
     def obj = c.next()
     assertNull obj.bar
-    assertEquals 10, obj.foo 
+    assertEquals 10, obj.foo
   }
 
   void testFindOne() {
@@ -166,6 +208,18 @@ class DBCollectionTest extends IntegrationTestCase {
     // TODO: 1.7.2 BUG, test in 1.7.3
     // assertNull db.foo.findOne([key: 'Bar'] as BasicDBObject)
     db.foo.update([key: 'Foo'], [updated: true])
+    assertEquals true, coll.findOne().updated
+  }
+  
+  void testUpdateGSting() {
+    _insert()
+    db.foo.update([key: "${'Bar'}"], [updated: true])
+    assertEquals null, coll.findOne().updated
+    def p = [key: "${'Bar'}"] as BasicDBObject
+    assertNull db.foo.findOne(p)
+    // TODO: 1.7.2 BUG, test in 1.7.3
+    // assertNull db.foo.findOne([key: 'Bar'] as BasicDBObject)
+    db.foo.update([key: "${'Foo'}"], [updated: true])
     assertEquals true, coll.findOne().updated
   }
 
