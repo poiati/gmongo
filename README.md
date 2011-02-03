@@ -11,6 +11,12 @@ Any bug, suggestion or ... whatever.
 Email: paulogpoiati@gmail.com
 
 # Usage
+
+com.gmongo.GMongo don't extends com.mongodb.Mongo. It delegate all methods calls to a Mongo instance. If
+you need to get the Mongo reference just call com.gmongo.GMongo#getMongo.
+
+Sample:
+
     // To download GMongo on the fly and put it at classpath
     @Grab(group='com.gmongo', module='gmongo', version='0.5.1')
     import com.gmongo.GMongo
