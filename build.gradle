@@ -6,6 +6,8 @@ group = 'com.gmongo'
 version = '0.7'
 artifact = 'gmongo'
 
+bundleDir = "$buildDir/bundle"
+
 repositories {
   mavenCentral()
 }
@@ -22,8 +24,7 @@ task source << {
   }
 }
 
-task bundle(dependsOn: [ 'build', 'source', 'groovydoc', 'pom' ]) << {
-  def bundleDir = "$buildDir/bundle"
+task prepareBundle(dependsOn: [ 'build', 'source', 'groovydoc', 'pom' ]) << {
   ant.copy(file: "$buildDir/libs/$artifact-${version}.jar", todir: bundleDir)
   ant.copy(file: "$buildDir/$artifact-$version-sources.jar", todir: bundleDir)
   ant.copy(file: "$buildDir/pom.xml", todir: bundleDir)
@@ -33,7 +34,10 @@ task bundle(dependsOn: [ 'build', 'source', 'groovydoc', 'pom' ]) << {
   new File(bundleDir).eachFile {
     gpgSign it.absolutePath
   }
-  ant.jar(destfile: "$bundleDir/$artifact-$version-bundle.jar", basedir: bundleDir)
+}
+
+task packBundle << {
+  ant.jar(destfile: "$bundleDir/$artifact-$version-bundle.jar", basedir: new File(bundleDir))
 }
 
 task pom << {
