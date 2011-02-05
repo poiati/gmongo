@@ -12,8 +12,8 @@ Email: paulogpoiati@gmail.com
 
 # Usage
 
-com.gmongo.GMongo don't extends com.mongodb.Mongo. It delegate all methods calls to a Mongo instance. If
-you need to get the Mongo reference just call com.gmongo.GMongo#getMongo.
+com.gmongo.GMongo doesn't extends com.mongodb.Mongo. It delegate all methods calls to a Mongo instance. If
+you need to get the Mongo reference just call com.gmongo.GMongo#getMongo.
 
 Sample:
 

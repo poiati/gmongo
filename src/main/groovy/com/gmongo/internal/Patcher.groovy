@@ -24,33 +24,38 @@ class Patcher {
 
   static final PATCH_MARK = '__decorated'
 
-  static _patchInternal(o, pmethods, alias=[:], addmethods=[:], afterreturn=[:]) {
-    o.metaClass.invokeMethod = { String name, args ->
+  static _patchInternal(target, pmethods, alias=[:], addmethods=[:], afterreturn=[:]) {
+    target.metaClass.invokeMethod = { String name, args ->
       def nameOrAlias = alias[name] ?: name
       if (nameOrAlias in pmethods) {
         def cargs = _convert(args)
-        def method = o.class.metaClass.getMetaMethod(nameOrAlias, _types(cargs, true))
+        def method = target.class.metaClass.getMetaMethod(nameOrAlias, _types(cargs, true))
         if (method == null) {
-          def other = addmethods[nameOrAlias]
-          if (other == null)
-            throw new MissingMethodException(name, o.class, args)
-          other.delegate = o
-          def largs = []
-          for (arg in cargs) largs << arg
-          return other.call(largs) 
+          def other = _getAdditionalMethod(addmethods, nameOrAlias, target, args)
+          return other.call(cargs as List) 
         }
-        def result = method.doMethodInvoke(delegate, cargs)
-        afterreturn.get(nameOrAlias)?.call(args, result)
-        return result
+        return _invoke(method, delegate, args, cargs, afterreturn)
       }
-      def method = o.metaClass.getMetaMethod(nameOrAlias, _types(args))
-      if (!method)
-        throw new MissingMethodException(name, o.class, args)
-      def result = method.doMethodInvoke(delegate, args)
-      afterreturn.get(nameOrAlias)?.call(args, result)
-      return result
+      def method = target.metaClass.getMetaMethod(nameOrAlias, _types(args))
+      if (!method) 
+        throw new MissingMethodException(name, target.class, args)
+      return _invoke(method, delegate, args, args, afterreturn)
     }
-    o.metaClass[Patcher.PATCH_MARK] = true
+    target.metaClass[Patcher.PATCH_MARK] = true
+  }
+  
+  static _invoke(method, delegate, originalArgs, invokeArgs, afterreturn) {
+    def result = method.doMethodInvoke(delegate, invokeArgs)
+    afterreturn.get(method.name)?.call(originalArgs, result)
+    return result
+  }
+  
+  static _getAdditionalMethod(additionalMethods, nameOrAlias, target, args) {
+    def other = additionalMethods[nameOrAlias]
+    if (other == null)
+      throw new MissingMethodException(nameOrAlias, target.class, args)
+    other.delegate = target
+    return other
   }
 
   static _convert(args) {
@@ -61,12 +66,11 @@ class Patcher {
         convertedArgs[i] = _convert(args[i])
         continue
       }
+      _converAllCharSeqToString(args[i])
       if (!(args[i] instanceof Map) || (args[i] instanceof DBObject)) {
-        _converAllCharSeqToString(args[i])
         convertedArgs[i] = args[i]
         continue
       }
-      _converAllCharSeqToString(args[i])
       convertedArgs[i] = (args[i] as BasicDBObject)
     }
     return ((args instanceof List) ? convertedArgs : (convertedArgs as Object[]))
