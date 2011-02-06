@@ -10,6 +10,12 @@ Any bug, suggestion or ... whatever.
 
 Email: paulogpoiati@gmail.com
 
+# Maven
+
+All versions of the project can be found in the maven central repository:
+
+    http://repo1.maven.org/maven2/com/gmongo/gmongo/
+
 # Usage
 
 com.gmongo.GMongo doesn't extends com.mongodb.Mongo. It delegate all methods calls to a Mongo instance. If
