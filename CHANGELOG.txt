@@ -1,3 +1,10 @@
+* 0.7
+  - Replica Set Support
+  - Added a constructor to com.gmongo.GMongo that take a com.mongodb.Mongo instance
+  - Support for com.mongodb.DBCursor#sort and other cursor methods
+  - groovy.lang.GString is now correctly handled by GMongo. Before 0.7 it can't be used as replacement for Strings in DBCollection methods
+  - Support for Groovy 1.7.7 and mongo-java-driver 2.4
+
 * 0.6
   - Collections truth. Empty collections are evaluated to false and non empty are evaluated to true in logical expression
   - Better internal error handling

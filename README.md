@@ -18,7 +18,7 @@ you need to get the Mongo reference just call com.gmongo.GMongo#getMongo.
 Sample:
 
     // To download GMongo on the fly and put it at classpath
-    @Grab(group='com.gmongo', module='gmongo', version='0.5.1')
+    @Grab(group='com.gmongo', module='gmongo', version='0.7')
     import com.gmongo.GMongo
     // Instantiate a com.gmongo.GMongo object instead of com.mongodb.Mongo
     // The same constructors and methods are available here
@@ -88,9 +88,39 @@ Sample:
         db.languages.insert(name: 'Objective-C')
         assert 1 == db.languages.count(name: 'Objective-C')
     }
+
+## Sorting and Pagination
+    @Grab(group='com.gmongo', module='gmongo', version='0.7')
+    import com.gmongo.GMongo
+    
+    def mongo = new GMongo()
+    def db = mongo.getDB("gmongo")
+    
+    // Make sure that the collection is empty
+    db.example.drop()
+    
+    // Insert 100 documents with any random value
+    100.times {
+        db.example << [time: it, random: (Integer)(Math.random() * 100)]
+    }
+    
+    def at = 0
+    
+    // Find out how many documents are in the collection
+    def total = db.example.find().count()
+    
+    // Sort the documents by the 'random' property ascending and Paginate over it 10 by 10
+    while (at < total) {
+        println "At page: ${at / 10}\n"
+        db.example.find().limit(10).skip(at).sort(random: 1).each {
+            println "\t-- ${it}"
+        }
+        println "\n--------------------------"
+        at += 10
+    }
     
 ## MapReduce
-    @Grab(group='com.gmongo', module='gmongo', version='0.5.1')
+    @Grab(group='com.gmongo', module='gmongo', version='0.7')
     import com.gmongo.GMongo
 
     def mongo = new GMongo()

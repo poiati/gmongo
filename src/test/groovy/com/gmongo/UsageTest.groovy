@@ -73,6 +73,28 @@ class UsageTest extends GroovyTestCase {
       assert 1 == db.languages.count(name: 'Objective-C')
     }
   }
+  
+  void testSortingUsage() {
+    def mongo = new GMongo()
+    def db = mongo.getDB("gmongo")
+    
+    db.example.drop()
+
+    100.times {
+        db.example << [time: it, random: (Integer)(Math.random() * 100)]
+    }
+
+    def at = 0, total = db.example.find().count()
+
+    while (at < total) {
+        println "At page: ${at / 10}\n"
+        db.example.find().limit(10).skip(at).sort(random: 1).each {
+            println "\t-- ${it}"
+        }
+        println "\n--------------------------"
+        at += 10
+    }
+  }
 
   void setUp() {
     new GMongo().getDB("gmongo").dropDatabase()
