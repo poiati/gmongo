@@ -41,9 +41,9 @@ class Patcher {
         throw new MissingMethodException(name, target.class, args)
       return _invoke(method, delegate, args, args, afterreturn)
     }
-    target.metaClass[Patcher.PATCH_MARK] = true
+    _markAsPatched(target)
   }
-  
+
   static _invoke(method, delegate, originalArgs, invokeArgs, afterreturn) {
     def result = method.doMethodInvoke(delegate, invokeArgs)
     afterreturn.get(method.name)?.call(originalArgs, result)
@@ -76,7 +76,7 @@ class Patcher {
     return ((args instanceof List) ? convertedArgs : (convertedArgs as Object[]))
   }
   
-  static _converAllCharSeqToString(map) {    
+  static _converAllCharSeqToString(map) {
     map.each { entry ->
       def val = entry.value
       if (val instanceof List) {
@@ -112,5 +112,9 @@ class Patcher {
       types << arg.getClass()
     }
     return types as Object[]
+  }
+  
+  private static _markAsPatched(target) {
+    target.metaClass[Patcher.PATCH_MARK] = true
   }
 }

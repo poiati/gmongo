@@ -41,6 +41,7 @@ class DBCollectionPatcher {
     apply: { defaultArgs, result ->
       defaultArgs[0]._id = result
     },
+    
     find: { defaultArgs, result ->
       DBCursorPatcher.patch(result)
     }
