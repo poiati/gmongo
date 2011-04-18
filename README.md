@@ -24,7 +24,7 @@ you need to get the Mongo reference just call com.gmongo.GMongo#getMongo.
 Sample:
 
     // To download GMongo on the fly and put it at classpath
-    @Grab(group='com.gmongo', module='gmongo', version='0.7')
+    @Grab(group='com.gmongo', module='gmongo', version='0.8')
     import com.gmongo.GMongo
     // Instantiate a com.gmongo.GMongo object instead of com.mongodb.Mongo
     // The same constructors and methods are available here
@@ -96,7 +96,7 @@ Sample:
     }
 
 ## Sorting and Pagination
-    @Grab(group='com.gmongo', module='gmongo', version='0.7')
+    @Grab(group='com.gmongo', module='gmongo', version='0.8')
     import com.gmongo.GMongo
     
     def mongo = new GMongo()
@@ -126,7 +126,7 @@ Sample:
     }
     
 ## MapReduce
-    @Grab(group='com.gmongo', module='gmongo', version='0.7')
+    @Grab(group='com.gmongo', module='gmongo', version='0.8')
     import com.gmongo.GMongo
 
     def mongo = new GMongo()
