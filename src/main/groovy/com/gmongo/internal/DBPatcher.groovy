@@ -15,9 +15,12 @@ limitations under the License.
 */
 package com.gmongo.internal
 
-class DBPatcher {
+import static com.gmongo.internal.Patcher.*
 
-  static final PATCHED_METHODS = [ 'command', 'createCollection' ]
+import com.mongodb.DB
+import com.mongodb.BasicDBObject
+
+class DBPatcher {
 
   static final AFTER_RETURN = [
     createCollection: { defaultArgs, result ->
@@ -25,9 +28,11 @@ class DBPatcher {
     }
   ]
 
-  static patch(db) {
-    if (db.hasProperty(Patcher.PATCH_MARK)) return
-
+  static patch( db ) {
+    if ( _isPatched( db ) ) return
+    
+    def _simpleMapToDBObjectPatchDB = _simpleMapToDBObjectPatch.curry( DB )
+    
     db.metaClass.with {
       getCollection = { String name ->
         _invokeOriginal delegate, "getCollection", name
@@ -49,10 +54,24 @@ class DBPatcher {
             delegate.requestDone()
         }
       }
+      
+      
+      command = _simpleMapToDBObjectPatchDB.curry( "command" )
+      
     }
-    Patcher._patchInternal db, PATCHED_METHODS, [:], [:], AFTER_RETURN
+    
+    db.metaClass.createCollection = _simpleStringMapToDBObjectPatch.curry( DB, "createCollection" )
+    
+    _markAsPatched( db )
+    
+    return db
   }
-
+  
+  static _simpleStringMapToDBObjectPatch = { clazz, methodName, String value, Map object ->
+    def method = _findMetaMethod( clazz, methodName, [ String, DBObject ] )
+    return _patchedCollection( _invokeMethod( method, delegate, [ value, object as BasicDBObject ] ) )
+  }
+  
   private static _patchedCollection(c) {
     if (c.hasProperty(Patcher.PATCH_MARK)) return c
     DBCollectionPatcher.patch(c)

@@ -15,49 +15,33 @@ limitations under the License.
 */
 package com.gmongo.internal
 
-import com.mongodb.DBObject
+import static com.gmongo.internal.Patcher.*
+
 import com.mongodb.DBCursor
-import com.mongodb.BasicDBObject
 
 class DBCursorPatcher {
   
   static patch( cursor ) {
-    if ( cursor.hasProperty( Patcher.PATCH_MARK ) ) return
+    if ( _isPatched( cursor ) ) return
     
-    _patchSort( cursor )
-    _patchHint( cursor )
+    def _simpleMapToDBObjectPatchDBCursor = _simpleMapToDBObjectPatch.curry( DBCursor )
+    
+    cursor.metaClass.with {
+      sort = _simpleMapToDBObjectPatchDBCursor.curry( "sort" )
+      hint = _simpleMapToDBObjectPatchDBCursor.curry( "hint" )
+    }
+    
     _patchCopy( cursor )
-    
-    Patcher._markAsPatched( cursor )
-    
+
+    _markAsPatched( cursor )
+
     return cursor
-  }
-  
-  private static _patchSort( cursor ) {
-    cursor.metaClass.sort = _simpleMapToDBObjectPatch.curry( "sort" )
-  }
-  
-  private static _patchHint( cursor ) {
-    cursor.metaClass.hint = _simpleMapToDBObjectPatch.curry( "hint" )
   }
   
   private static _patchCopy( cursor ) {
     cursor.metaClass.copy = { ->
-      def method = _findMetaMethod( "copy", [ ] )
-      return patch( _invokeMethod( method, delegate, [] as Object[] ) )
+      def method = _findMetaMethod( DBCursor, "copy", [ ] )
+      return patch( _invokeMethod( method, delegate, [ ] ) )
     }
-  }
-  
-  private static _simpleMapToDBObjectPatch = { methodName, Map object ->
-    def method = _findMetaMethod( methodName, [ DBObject ])
-    return _invokeMethod( method, delegate, [ object as BasicDBObject ] as Object[ ] )
-  }
-  
-  private static _findMetaMethod( methodName, args ) {
-    return DBCursor.metaClass.getMetaMethod( methodName, args as Object[ ] )
-  }
-  
-  private static _invokeMethod( method, target, args ) {
-    return method.invoke( target, args as Object[ ] )
   }
 }
