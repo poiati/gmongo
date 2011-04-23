@@ -89,7 +89,7 @@ class DBTest extends IntegrationTestCase {
   }
 
   void testCreateCollection() {
-    def c = db.createCollection("foo", [capped: true, size: 100000])
+    def c = db.createCollection('foo', [capped: true, size: 100000])
     assert c.hasProperty(Patcher.PATCH_MARK)
     assert db.foo.hasProperty(Patcher.PATCH_MARK)
   }

@@ -123,12 +123,15 @@ class Patcher {
     target.hasProperty(Patcher.PATCH_MARK)
   }
   
+  // Return a closure that transform a plain Map in a BasicDBObject
   static _simpleMapToDBObjectPatch = { clazz, methodName, Map object ->
     def method = _findMetaMethod( clazz, methodName, [ DBObject ])
     return _invokeMethod( method, delegate, [ object as BasicDBObject ] as Object[ ] )
   }
 
   static _findMetaMethod( clazz, methodName, args ) {
+    def method = clazz.metaClass.getMetaMethod( methodName, args as Object[ ] )
+    println "$clazz : $methodName : $args : $method"
     return clazz.metaClass.getMetaMethod( methodName, args as Object[ ] )
   }
 

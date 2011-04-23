@@ -18,34 +18,34 @@ package com.gmongo.internal
 import static com.gmongo.internal.Patcher.*
 
 import com.mongodb.DB
+import com.mongodb.DBObject
 import com.mongodb.BasicDBObject
 
 class DBPatcher {
-
-  static final AFTER_RETURN = [
-    createCollection: { defaultArgs, result ->
-      DBCollectionPatcher.patch result
-    }
-  ]
-
+  
+  // Methods that return a collection and need special handling
+  static final METHODS_RETURNING_COLLECTION = "getCollection getCollectionFromFull getCollectionFromString".split(/\s+/)
+  static final METHOD_COMMAND = "command"
+  static final METHOD_CREATE_COLLECTION = "createCollection"
+  
   static patch( db ) {
     if ( _isPatched( db ) ) return
     
     def _simpleMapToDBObjectPatchDB = _simpleMapToDBObjectPatch.curry( DB )
     
     db.metaClass.with {
-      getCollection = { String name ->
-        _invokeOriginal delegate, "getCollection", name
+      
+      // Must add methods to DBCollection MetaClass before returning
+      this.METHODS_RETURNING_COLLECTION.each {
+        delegate[it] = { String name -> _invokeOriginal delegate, name }
       }
-      getCollectionFromFull = { String name ->
-        _invokeOriginal delegate, "getCollection", name
-      }
-      getCollectionFromString = { String name ->
-        _invokeOriginal delegate, "getCollection", name
-      }	
+      
+      // Property calls must return a collection
       getProperty = { name ->
-        return _patchedCollection(delegate.getCollection(name))
+        _patchedCollection( delegate.getCollection( name ) )
       }
+      
+      // Execute a code block between DB#requestStart and DB#requestDone
       inRequest = { Closure fn ->
         delegate.requestStart()
         try {
@@ -55,15 +55,13 @@ class DBPatcher {
         }
       }
       
-      
-      command = _simpleMapToDBObjectPatchDB.curry( "command" )
-      
+      // Add methods that accept a Map in the place of a DBObject
+      command = _simpleMapToDBObjectPatchDB.curry( DBPatcher.METHOD_COMMAND )
+      createCollection = this._simpleStringMapToDBObjectPatch.curry( DB, DBPatcher.METHOD_CREATE_COLLECTION )
     }
     
-    db.metaClass.createCollection = _simpleStringMapToDBObjectPatch.curry( DB, "createCollection" )
-    
+    // Mark this instance as Patched
     _markAsPatched( db )
-    
     return db
   }
   
@@ -72,14 +70,14 @@ class DBPatcher {
     return _patchedCollection( _invokeMethod( method, delegate, [ value, object as BasicDBObject ] ) )
   }
   
-  private static _patchedCollection(c) {
+  private static _patchedCollection( c ) {
     if (c.hasProperty(Patcher.PATCH_MARK)) return c
     DBCollectionPatcher.patch(c)
     return c
   }
 
-  private static _invokeOriginal(delegate, methodName, name) {
-    def original = delegate.class.metaClass.getMetaMethod(methodName, [ String ] as Object[])
-    return _patchedCollection(original.doMethodInvoke(delegate, name))
+  private static _invokeOriginal( delegate, name ) {
+    def original = _findMetaMethod( DB, "getCollection", [ String ] as Object[] )
+    return _patchedCollection( original.doMethodInvoke( delegate, name ) )
   }
 }
