@@ -162,6 +162,61 @@ Sample:
     assert db.mrresult.count() == 3
     assert db.mrresult.find()*.value*.count.sum() == 1000
 
+## Grouping
+
+Grouping can also be achieved. Example:
+
+    @Grab("com.gmongo:gmongo:0.8")
+    import com.gmongo.GMongo
+
+    def gmongo = new GMongo("localhost:27017")
+
+    def db = gmongo.getDB("test")
+
+    db.clicks.drop()
+
+    db.clicks.insert(day: 1, total: 10)
+    db.clicks.insert(day: 1, total: 14)
+    db.clicks.insert(day: 2, total: 45)
+    db.clicks.insert(day: 1, total:  9)
+    db.clicks.insert(day: 3, total: 32)
+    db.clicks.insert(day: 2, total: 11)
+    db.clicks.insert(day: 3, total: 34)
+
+    def result = db.clicks.group([day: true], [:], [count: 0], "function(doc, out) { out.count += doc.total }")
+    
+    // Will output [[day:1.0, count:33.0], [day:2.0, count:56.0], [day:3.0, count:66.0]]
+    println result
+
+And a more advanced grouping using 'keyf':
+
+    @Grab("com.gmongo:gmongo:0.8")
+    import com.gmongo.GMongo
+
+    def gmongo = new GMongo("localhost:27017")
+
+    def db = gmongo.getDB("test")
+
+    db.clicks.drop()
+
+    db.clicks.insert(day: 1, total: 10)
+    db.clicks.insert(day: 1, total: 14)
+    db.clicks.insert(day: 2, total: 45)
+    db.clicks.insert(day: 1, total:  9)
+    db.clicks.insert(day: 3, total: 32)
+    db.clicks.insert(day: 2, total: 11)
+    db.clicks.insert(day: 3, total: 34)
+
+    def keyf = "function(clicks) { return clicks.day % 2 ? { odd: true } : { even: true } }"
+
+    def command = ['$keyf': keyf, cond: [:], initial: [count: 0], $reduce: "function(doc, out) { out.count += doc.total }"]
+
+    def result = db.clicks.group(command)
+    
+    // Will output [[odd:true, count:99.0], [even:true, count:56.0]]
+    println result  
+
+
 # Build
 
 The project is build using gradle. Gradle can be found in: http://www.gradle.org
