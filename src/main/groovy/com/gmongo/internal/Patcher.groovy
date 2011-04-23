@@ -131,7 +131,6 @@ class Patcher {
 
   static _findMetaMethod( clazz, methodName, args ) {
     def method = clazz.metaClass.getMetaMethod( methodName, args as Object[ ] )
-    println "$clazz : $methodName : $args : $method"
     return clazz.metaClass.getMetaMethod( methodName, args as Object[ ] )
   }
 
