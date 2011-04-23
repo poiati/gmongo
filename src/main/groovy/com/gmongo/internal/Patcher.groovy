@@ -19,6 +19,7 @@ import com.mongodb.DB
 import com.mongodb.DBCollection
 import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
+import com.mongodb.DBCursor
 
 class Patcher {
 
@@ -114,7 +115,26 @@ class Patcher {
     return types as Object[]
   }
   
-  private static _markAsPatched(target) {
+  static _markAsPatched(target) {
     target.metaClass[Patcher.PATCH_MARK] = true
+  }
+  
+  static _isPatched(target) {
+    target.hasProperty(Patcher.PATCH_MARK)
+  }
+  
+  // Return a closure that transform a plain Map in a BasicDBObject
+  static _simpleMapToDBObjectPatch = { clazz, methodName, Map object ->
+    def method = _findMetaMethod( clazz, methodName, [ DBObject ])
+    return _invokeMethod( method, delegate, [ object as BasicDBObject ] as Object[ ] )
+  }
+
+  static _findMetaMethod( clazz, methodName, args ) {
+    def method = clazz.metaClass.getMetaMethod( methodName, args as Object[ ] )
+    return clazz.metaClass.getMetaMethod( methodName, args as Object[ ] )
+  }
+
+  static _invokeMethod( method, target, args ) {
+    return method.invoke( target, args as Object[ ] )
   }
 }

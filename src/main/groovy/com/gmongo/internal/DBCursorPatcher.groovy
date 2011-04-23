@@ -15,49 +15,37 @@ limitations under the License.
 */
 package com.gmongo.internal
 
-import com.mongodb.DBObject
+import static com.gmongo.internal.Patcher.*
+
 import com.mongodb.DBCursor
-import com.mongodb.BasicDBObject
 
 class DBCursorPatcher {
   
+  // Methods to be patched
+  static final SIMPLE_METHODS = [ "sort", "hint" ]
+  static final COPY_METHOD = "copy"
+  
+  // Patch the cursor instance
   static patch( cursor ) {
-    if ( cursor.hasProperty( Patcher.PATCH_MARK ) ) return
+    if ( _isPatched( cursor ) ) return
     
-    _patchSort( cursor )
-    _patchHint( cursor )
+    def _simpleMapToDBObjectPatchDBCursor = _simpleMapToDBObjectPatch.curry( DBCursor )
+    
+    // Create a Map version for each method that accept a single DBObject 
+    cursor.metaClass.with {
+      DBCursorPatcher.SIMPLE_METHODS.each { delegate[ it ] = _simpleMapToDBObjectPatchDBCursor.curry( it ) }
+    }
+    
     _patchCopy( cursor )
-    
-    Patcher._markAsPatched( cursor )
-    
+    _markAsPatched( cursor )
     return cursor
   }
   
-  private static _patchSort( cursor ) {
-    cursor.metaClass.sort = _simpleMapToDBObjectPatch.curry( "sort" )
-  }
-  
-  private static _patchHint( cursor ) {
-    cursor.metaClass.hint = _simpleMapToDBObjectPatch.curry( "hint" )
-  }
-  
+  // Patch the copy method to return a patched DBCollection
   private static _patchCopy( cursor ) {
     cursor.metaClass.copy = { ->
-      def method = _findMetaMethod( "copy", [ ] )
-      return patch( _invokeMethod( method, delegate, [] as Object[] ) )
+      def method = _findMetaMethod( DBCursor, COPY_METHOD, [ ] )
+      return patch( _invokeMethod( method, delegate, [ ] ) )
     }
-  }
-  
-  private static _simpleMapToDBObjectPatch = { methodName, Map object ->
-    def method = _findMetaMethod( methodName, [ DBObject ])
-    return _invokeMethod( method, delegate, [ object as BasicDBObject ] as Object[ ] )
-  }
-  
-  private static _findMetaMethod( methodName, args ) {
-    return DBCursor.metaClass.getMetaMethod( methodName, args as Object[ ] )
-  }
-  
-  private static _invokeMethod( method, target, args ) {
-    return method.invoke( target, args as Object[ ] )
   }
 }
