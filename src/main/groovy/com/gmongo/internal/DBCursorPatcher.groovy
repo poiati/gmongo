@@ -21,26 +21,30 @@ import com.mongodb.DBCursor
 
 class DBCursorPatcher {
   
+  // Methods to be patched
+  static final SIMPLE_METHODS = [ "sort", "hint" ]
+  static final COPY_METHOD = "copy"
+  
+  // Patch the cursor instance
   static patch( cursor ) {
     if ( _isPatched( cursor ) ) return
     
     def _simpleMapToDBObjectPatchDBCursor = _simpleMapToDBObjectPatch.curry( DBCursor )
     
+    // Create a Map version for each method that accept a single DBObject 
     cursor.metaClass.with {
-      sort = _simpleMapToDBObjectPatchDBCursor.curry( "sort" )
-      hint = _simpleMapToDBObjectPatchDBCursor.curry( "hint" )
+      DBCursorPatcher.SIMPLE_METHODS.each { delegate[ it ] = _simpleMapToDBObjectPatchDBCursor.curry( it ) }
     }
     
     _patchCopy( cursor )
-
     _markAsPatched( cursor )
-
     return cursor
   }
   
+  // Patch the copy method to return a patched DBCollection
   private static _patchCopy( cursor ) {
     cursor.metaClass.copy = { ->
-      def method = _findMetaMethod( DBCursor, "copy", [ ] )
+      def method = _findMetaMethod( DBCursor, COPY_METHOD, [ ] )
       return patch( _invokeMethod( method, delegate, [ ] ) )
     }
   }
