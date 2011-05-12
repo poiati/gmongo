@@ -31,7 +31,7 @@ class DBTest extends IntegrationTestCase {
     assert c.hasProperty(Patcher.PATCH_MARK)
   }
 
-  void testGetCollecionGroovy() {
+  void testGetCollectionGroovy() {
     assert db.foo instanceof DBCollection
     assert db.foo.hasProperty(Patcher.PATCH_MARK)
     assert db.bar instanceof DBCollection
