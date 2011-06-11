@@ -1,3 +1,9 @@
+* 0.8.1
+  - Added constructor GMongo( MongoUri )
+  - Groovy version updated to 1.8
+  - Updated mongo-java-driver to version 2.6.3
+* 0.8
+  - Fixed a memory leak introduced in version 0.7
 * 0.7
   - Replica Set Support
   - Added a constructor to com.gmongo.GMongo that take a com.mongodb.Mongo instance
