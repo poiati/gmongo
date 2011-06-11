@@ -22,6 +22,7 @@ import com.mongodb.ServerAddress
 import com.mongodb.Mongo
 import com.mongodb.DB
 import com.mongodb.DBAddress
+import com.mongodb.MongoURI
 
 import com.gmongo.internal.DBPatcher
 
@@ -76,6 +77,10 @@ class GMongo {
 
   GMongo( List<ServerAddress> replicaSetSeeds) {
     this.mongo = new Mongo(replicaSetSeeds)
+  }
+  
+  GMongo( MongoURI mongoURI ) {
+    this.mongo = new Mongo( mongoURI )
   }
 
   DB getDB(String name) {
