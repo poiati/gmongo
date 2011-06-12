@@ -10,6 +10,8 @@ Any bug, suggestion or ... whatever.
 
 Email: paulogpoiati@gmail.com
 
+Twitter: http://twitter.com/poiati
+
 # Maven
 
 All versions of the project can be found in the maven central repository:
