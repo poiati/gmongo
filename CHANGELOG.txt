@@ -1,4 +1,5 @@
 * 0.8.1
+  - Added support to insert methods with WriteConcern
   - Added constructor GMongo( MongoUri )
   - Groovy version updated to 1.8
   - Updated mongo-java-driver to version 2.6.3

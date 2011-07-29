@@ -67,7 +67,8 @@ class Patcher {
         convertedArgs[i] = _convert(args[i])
         continue
       }
-      _converAllCharSeqToString(args[i])
+      if ( args[i] instanceof Map )
+        _converAllCharSeqToString(args[i])
       if (!(args[i] instanceof Map) || (args[i] instanceof DBObject)) {
         convertedArgs[i] = args[i]
         continue

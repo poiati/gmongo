@@ -5,6 +5,7 @@ import com.gmongo.internal.Patcher
 import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
 import com.mongodb.BasicDBList
+import com.mongodb.WriteConcern
 
 class DBCollectionTest extends IntegrationTestCase {
 
@@ -29,8 +30,20 @@ class DBCollectionTest extends IntegrationTestCase {
     assert coll.findOne().bar == 1
   }
   
+  void testInsertWriteConcern() {
+    db.foo.insert([bar: 1], WriteConcern.NORMAL)
+    assert db.foo.count() == 1
+    assert coll.findOne().bar == 1
+  }
+  
   void testInsertGString() {
     db.foo.insert([bar: "${1 + 1}"])
+    assert db.foo.count() == 1
+    assert coll.findOne().bar == "2"
+  }
+  
+  void testInsertGStringWriteConcern() {
+    db.foo.insert([bar: "${1 + 1}"], WriteConcern.NORMAL)
     assert db.foo.count() == 1
     assert coll.findOne().bar == "2"
   }
@@ -103,6 +116,11 @@ class DBCollectionTest extends IntegrationTestCase {
     assertEquals 3, db.foo.count()
   }
   
+  void testInsertListWriteConcern() {
+    db.foo.insert([[key: 1], [key: 2], [foo: 'bar']], WriteConcern.NORMAL)
+    assertEquals 3, db.foo.count()
+  }
+  
   void testInsertListGString() {
     db.foo.insert([[key: "${1 + 1}"], [key: "${2 + 2}"], [foo: 'bar']])
     assertEquals 3, db.foo.count()
@@ -113,6 +131,14 @@ class DBCollectionTest extends IntegrationTestCase {
     objs[0] = [key: 1] as BasicDBObject
     objs[1] = [key: 2] as BasicDBObject
     db.foo.insert objs
+    assertEquals 2, db.foo.count()
+  }
+  
+  void testInsertArrayWriteConcern() {
+    DBObject[] objs = new DBObject[2]
+    objs[0] = [key: 1] as BasicDBObject
+    objs[1] = [key: 2] as BasicDBObject
+    db.foo.insert objs, WriteConcern.NORMAL
     assertEquals 2, db.foo.count()
   }
 
