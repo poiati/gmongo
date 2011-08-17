@@ -4,11 +4,8 @@ import com.gmongo.internal.Patcher
 
 class DBCursorTest extends IntegrationTestCase {
 
-  def db
-
   void setUp() {
     super.setUp()
-    db = mongo.getDB(DB_NAME)
     db.foo.drop()
   }
 

@@ -8,11 +8,8 @@ import com.mongodb.DBObject
 
 class DBTest extends IntegrationTestCase {
 
-  def db
-
   void setUp() {
     super.setUp()
-    db = mongo.getDB(DB_NAME)
     db.dropDatabase()
   }
 

@@ -9,12 +9,10 @@ import com.mongodb.WriteConcern
 
 class DBCollectionTest extends IntegrationTestCase {
 
-  def db
   def coll
 
   void setUp() {
     super.setUp()
-    db = mongo.getDB(DB_NAME)
     coll = db.getCollection('foo')
     coll.drop()
     db.justAnotherFooInTheWall.drop()
