@@ -16,6 +16,11 @@ class DBRefTest extends IntegrationTestCase {
     db.authors << author
     db.books << book
     
-    assert db.books.findOne().author.fetch() == author
+    def bookAuthor = db.books.findOne().author.fetch()
+    
+    
+    assert author.size() == 2
+    assert author.name == "Foo"
+    assert author._id == 1
   }
 }
