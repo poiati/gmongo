@@ -143,13 +143,13 @@ class DBCollectionTest extends IntegrationTestCase {
   void testFind() {
     _insert()
     assert !db.foo.find(key: 'Bar')
-    assert	db.foo.find(key: 'Foo').count() == 1
+    assert  db.foo.find(key: 'Foo').count() == 1
   }
   
   void testFindGString() {
     _insert()
     assert !db.foo.find(key: "${'Bar'}")
-    assert	db.foo.find(key: "${'Foo'}").count() == 1
+    assert  db.foo.find(key: "${'Foo'}").count() == 1
   }
 
   void testFindFields() {
@@ -175,6 +175,14 @@ class DBCollectionTest extends IntegrationTestCase {
     def obj = db.foo.findOne([:], [bar: 1])
     assertNull obj.foo
     assertEquals 20, obj.bar
+  }
+  
+  void testFindAndModify() {
+    db.foo << [foo: 10, bar: 20]
+    db.foo.findAndModify([foo: 10], ['$set': [baz: 30]])
+    
+    assert 1 == db.foo.count()
+    assert 30 == db.foo.findOne().baz
   }
 
   void testRename() {

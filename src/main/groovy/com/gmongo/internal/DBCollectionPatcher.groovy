@@ -21,7 +21,7 @@ import com.mongodb.BasicDBObject
 class DBCollectionPatcher {
 
   static final PATCHED_METHODS = [ 
-    'insert', 'find', 'findOne','remove', 'save', 'count', 'update', 
+    'insert', 'find', 'findOne', 'findAndModify', 'remove', 'save', 'count', 'update', 
     'updateMulti', 'distinct', 'apply', 'createIndex', 'ensureIndex',
     'mapReduce', 'dropIndex', 'getCount', 'group', 'setHintFields'
   ]
