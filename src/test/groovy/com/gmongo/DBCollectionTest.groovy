@@ -184,6 +184,16 @@ class DBCollectionTest extends IntegrationTestCase {
     assert 1 == db.foo.count()
     assert 30 == db.foo.findOne().baz
   }
+  
+  void testFindAndRemove() {
+    db.foo << [foo: 10, baz: 40]
+    
+    assert 1 == db.foo.count()
+    
+    db.foo.findAndRemove(baz: 40)
+    
+    assert 0 == db.foo.count() 
+  }
 
   void testRename() {
     _insert()
