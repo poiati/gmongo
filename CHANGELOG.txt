@@ -1,3 +1,6 @@
+* 0.9.2
+  - Added support to com.mongodb.DBCollection#findAndModify
+  - Added support to com.mongodb.DBCollection#findAndRemove
 * 0.9.1
   - Moved to groovy 1.7.10 because of backward compatibility
 * 0.9
