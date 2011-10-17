@@ -19,7 +19,7 @@ import com.mongodb.DBObject
 import com.mongodb.BasicDBObject
 
 class DBCollectionPatcher {
-
+  
   static final PATCHED_METHODS = [ 
     'insert', 'find', 'findOne', 'findAndModify', 'findAndRemove', 'remove', 'save', 'count', 'update', 
     'updateMulti', 'distinct', 'apply', 'createIndex', 'ensureIndex',
@@ -36,6 +36,10 @@ class DBCollectionPatcher {
       delegate.update(q, o, upsert, false)
     }
   ]
+  
+  private static final COPY_GENERATED_ID = { defaultArgs, invokeArgs, result ->
+    MirrorObjectMutation.copyGeneratedId(invokeArgs.first(), defaultArgs.first())
+  }
 
   static final AFTER_RETURN = [
     apply: { defaultArgs, invokeArgs, result ->
@@ -45,24 +49,18 @@ class DBCollectionPatcher {
     find: { defaultArgs, invokeArgs, result ->
       DBCursorPatcher.patch(result)
     },
-    
-    save: { defaultArgs, invokeArgs, result ->
-      MirrorObjectMutation.copyGeneratedId(invokeArgs.first(), defaultArgs.first())
-    },
-    
-    insert: { defaultArgs, invokeArgs, result ->
-      MirrorObjectMutation.copyGeneratedId(invokeArgs.first(), defaultArgs.first())
-    }
+
+    save: COPY_GENERATED_ID, insert: COPY_GENERATED_ID
   ]
 
   static patch(c) {
     if (c.hasProperty(Patcher.PATCH_MARK))
       return
-    addCollectionTruth(c)
+    _addCollectionTruth(c)
     Patcher._patchInternal c, PATCHED_METHODS, ALIAS, ADDITIONAL_METHODS, AFTER_RETURN
   }
   
-  private static addCollectionTruth(c) {
+  private static _addCollectionTruth(c) {
     c.metaClass.asBoolean { -> delegate.count() > 0 }
   }
 }
