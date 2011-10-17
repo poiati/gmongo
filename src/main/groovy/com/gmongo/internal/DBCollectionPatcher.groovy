@@ -38,12 +38,20 @@ class DBCollectionPatcher {
   ]
 
   static final AFTER_RETURN = [
-    apply: { defaultArgs, result ->
+    apply: { defaultArgs, invokeArgs, result ->
       defaultArgs[0]._id = result
     },
     
-    find: { defaultArgs, result ->
+    find: { defaultArgs, invokeArgs, result ->
       DBCursorPatcher.patch(result)
+    },
+    
+    save: { defaultArgs, invokeArgs, result ->
+      MirrorObjectMutation.copyGeneratedId(invokeArgs.first(), defaultArgs.first())
+    },
+    
+    insert: { defaultArgs, invokeArgs, result ->
+      MirrorObjectMutation.copyGeneratedId(invokeArgs.first(), defaultArgs.first())
     }
   ]
 
@@ -57,4 +65,22 @@ class DBCollectionPatcher {
   private static addCollectionTruth(c) {
     c.metaClass.asBoolean { -> delegate.count() > 0 }
   }
+}
+
+static class MirrorObjectMutation {
+  
+  static void copyGeneratedId(Object[] from, Object[] to) {
+    copyGeneratedId(from as List, to as List)
+  }
+  
+  static void copyGeneratedId(List from, List to) {
+    from.size().times {
+      copyGeneratedId(from[it], to[it])
+    }
+  }
+  
+  static void copyGeneratedId(Map from, Map to) {
+    to._id = from._id
+  }
+  
 }

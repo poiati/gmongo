@@ -28,6 +28,14 @@ class DBCollectionTest extends IntegrationTestCase {
     assert coll.findOne().bar == 1
   }
   
+  void testInsertObjectMutation() {
+    def object = [bar: 1]
+    db.foo.insert(object)
+    assert db.foo.count() == 1
+    assert coll.findOne().bar == 1
+    assert object._id != null
+  }
+  
   void testInsertWriteConcern() {
     db.foo.insert([bar: 1], WriteConcern.NORMAL)
     assert db.foo.count() == 1
@@ -112,6 +120,18 @@ class DBCollectionTest extends IntegrationTestCase {
   void testInsertList() {
     db.foo.insert([[key: 1], [key: 2], [foo: 'bar']])
     assertEquals 3, db.foo.count()
+  }
+  
+  void testInsertListMutableObject() {
+    def o1 = [key: 1]
+    def o2 = [key: 2]
+    def o3 = [foo: 'bar']
+    
+    db.foo.insert([o1, o2, o3])
+    assertEquals 3, db.foo.count()
+    assert o1._id
+    assert o2._id
+    assert o3._id
   }
   
   void testInsertListWriteConcern() {
@@ -226,6 +246,12 @@ class DBCollectionTest extends IntegrationTestCase {
     db.foo.save(_id: id, key: 'bar')
     assertEquals 1, coll.count()
     assertEquals 'bar', coll.findOne().key
+  }
+  
+  void testSaveObjectMutation() {
+    def x = [monkey: 23]
+    db.collection.save(x)
+    assertNotNull x._id
   }
 
   void testCount() {

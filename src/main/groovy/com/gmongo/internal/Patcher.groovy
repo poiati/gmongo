@@ -47,7 +47,7 @@ class Patcher {
 
   static _invoke(method, delegate, originalArgs, invokeArgs, afterreturn) {
     def result = method.doMethodInvoke(delegate, invokeArgs)
-    afterreturn.get(method.name)?.call(originalArgs, result)
+    afterreturn.get(method.name)?.call(originalArgs, invokeArgs, result)
     return result
   }
   

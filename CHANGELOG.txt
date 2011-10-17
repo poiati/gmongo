@@ -1,3 +1,6 @@
+* 0.9.3
+  - com.mongodb.DBCollection#save now set an _id property in the object passed as argument when no _id is specified
+  - com.mongodb.DBCollection#insert now set an _id property in the object passed as argument when no _id is specified
 * 0.9.2
   - Added support to com.mongodb.DBCollection#findAndModify
   - Added support to com.mongodb.DBCollection#findAndRemove
