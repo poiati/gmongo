@@ -1,6 +1,7 @@
 apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
+apply plugin: 'signing'
 
 group = 'com.gmongo'
 version = '0.9.3'
@@ -31,9 +32,7 @@ task prepareBundle(dependsOn: [ 'build', 'source', 'groovydoc', 'pom' ]) << {
   ant.jar(destfile: "$bundleDir/$artifact-$version-javadoc.jar") {
     fileset (dir: "$buildDir/docs/groovydoc")
   }
-  new File(bundleDir).eachFile {
-    gpgSign it.absolutePath
-  }
+  sign(new File(bundleDir).listFiles());
 }
 
 task packBundle << {
@@ -65,11 +64,4 @@ task pom << {
       }
     }
   }.writeTo("$buildDir/pom.xml")
-}
-
-def gpgSign(file) {
-  def passphrase = System.properties['gpg.passphrase']
-  if (!passphrase) 
-    throw new RuntimeException("\nEnter your gpg passphrase. Ex: -Dgpg.passphrase=foo")
-  "gpg -ab --passphrase=$passphrase $file".execute()
 }
