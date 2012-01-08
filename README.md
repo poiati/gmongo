@@ -24,7 +24,7 @@ com.gmongo.GMongo doesn't extends com.mongodb.Mongo. It delegate all methods cal
 you need to get the Mongo reference just call com.gmongo.GMongo#getMongo.
 
 Sample:
-```groovy
+```
 // To download GMongo on the fly and put it at classpath
 @Grab(group='com.gmongo', module='gmongo', version='0.8')
 import com.gmongo.GMongo
