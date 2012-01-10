@@ -65,7 +65,7 @@ class DBCollectionPatcher {
   }
 }
 
-static class MirrorObjectMutation {
+class MirrorObjectMutation {
   
   static void copyGeneratedId(Object[] from, Object[] to) {
     copyGeneratedId(from as List, to as List)

@@ -1,6 +1,8 @@
 * 0.9.3
   - com.mongodb.DBCollection#save now set an _id property in the object passed as argument when no _id is specified
   - com.mongodb.DBCollection#insert now set an _id property in the object passed as argument when no _id is specified
+  - Now using Groovy version 1.8.5
+  - Now using mongo-java-driver version 2.7.2
 * 0.9.2
   - Added support to com.mongodb.DBCollection#findAndModify
   - Added support to com.mongodb.DBCollection#findAndRemove
