@@ -1,16 +1,9 @@
 package com.gmongo
 
 //TODO: Update to 0.6
-class UsageTest extends GroovyTestCase {
+class UsageTest extends IntegrationTestCase {
 
   void testUsage() {
-    // Instantiate a com.gmongo.GMongo object instead of com.mongodb.Mongo
-    // The same constructors and methods are available here
-    def mongo = new GMongo()
-
-    // Get a db reference in the old fashion way
-    def db = mongo.getDB("gmongo")
-
     // Collections can be accessed as a db property (like the javascript API)
     assert db.myCollection instanceof com.mongodb.DBCollection
     // They also can be accessed with array notation 
@@ -75,9 +68,6 @@ class UsageTest extends GroovyTestCase {
   }
   
   void testSortingUsage() {
-    def mongo = new GMongo()
-    def db = mongo.getDB("gmongo")
-    
     db.example.drop()
 
     100.times {
@@ -97,10 +87,12 @@ class UsageTest extends GroovyTestCase {
   }
 
   void setUp() {
-    new GMongo().getDB("gmongo").dropDatabase()
+    super.setUp()
+    db.dropDatabase()
   }
 
   void tearDown() {
-    new GMongo().getDB("gmongo").dropDatabase()
+    super.tearDown()
+    db.dropDatabase()
   }
 }

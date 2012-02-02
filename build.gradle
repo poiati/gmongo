@@ -39,6 +39,10 @@ task packBundle << {
   ant.jar(destfile: "$bundleDir/$artifact-$version-bundle.jar", basedir: new File(bundleDir))
 }
 
+test {
+    systemProperty "MONGO_PORT", System.getProperty("MONGO_PORT","27017")
+}
+
 task pom << {
   pom {
     project {
