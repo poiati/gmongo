@@ -1,3 +1,5 @@
+* 0.9.4
+  - Fix for #10 - null-safe operator in Patcher for null property values in map -> db object conversion (needed to work with Spock)
 * 0.9.3
   - com.mongodb.DBCollection#save now set an _id property in the object passed as argument when no _id is specified
   - com.mongodb.DBCollection#insert now set an _id property in the object passed as argument when no _id is specified
