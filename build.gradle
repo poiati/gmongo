@@ -4,7 +4,7 @@ apply plugin: 'eclipse'
 apply plugin: 'signing'
 
 group = 'com.gmongo'
-version = '0.9.4'
+version = '0.9.5'
 artifact = 'gmongo'
 
 bundleDir = "$buildDir/bundle"
