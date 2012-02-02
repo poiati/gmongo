@@ -111,7 +111,7 @@ class Patcher {
           continue
         }
       }
-      types << arg.getClass()
+      types << arg?.getClass()
     }
     return types as Object[]
   }
