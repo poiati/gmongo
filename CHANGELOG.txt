@@ -1,4 +1,4 @@
-* 0.9.6
+* 0.9.5
   - Upgraded to mongo-java-driver version 2.7.3
 * 0.9.4
   - Fix for #10 - null-safe operator in Patcher for null property values in map -> db object conversion (needed to work with Spock)
