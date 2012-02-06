@@ -100,126 +100,132 @@ db.inRequest {
 ```
 
 ## Sorting and Pagination
-    @Grab(group='com.gmongo', module='gmongo', version='0.8')
-    import com.gmongo.GMongo
-    
-    def mongo = new GMongo()
-    def db = mongo.getDB("gmongo")
-    
-    // Make sure that the collection is empty
-    db.example.drop()
-    
-    // Insert 100 documents with any random value
-    100.times {
-        db.example << [time: it, random: (Integer)(Math.random() * 100)]
+```groovy
+@Grab(group='com.gmongo', module='gmongo', version='0.8')
+import com.gmongo.GMongo
+
+def mongo = new GMongo()
+def db = mongo.getDB("gmongo")
+
+// Make sure that the collection is empty
+db.example.drop()
+
+// Insert 100 documents with any random value
+100.times {
+    db.example << [time: it, random: (Integer)(Math.random() * 100)]
+}
+
+def at = 0
+
+// Find out how many documents are in the collection
+def total = db.example.find().count()
+
+// Sort the documents by the 'random' property ascending and Paginate over it 10 by 10
+while (at < total) {
+    println "At page: ${at / 10}\n"
+    db.example.find().limit(10).skip(at).sort(random: 1).each {
+        println "\t-- ${it}"
     }
-    
-    def at = 0
-    
-    // Find out how many documents are in the collection
-    def total = db.example.find().count()
-    
-    // Sort the documents by the 'random' property ascending and Paginate over it 10 by 10
-    while (at < total) {
-        println "At page: ${at / 10}\n"
-        db.example.find().limit(10).skip(at).sort(random: 1).each {
-            println "\t-- ${it}"
-        }
-        println "\n--------------------------"
-        at += 10
-    }
+    println "\n--------------------------"
+    at += 10
+}
+```
     
 ## MapReduce
-    @Grab(group='com.gmongo', module='gmongo', version='0.8')
-    import com.gmongo.GMongo
+```groovy
+@Grab(group='com.gmongo', module='gmongo', version='0.8')
+import com.gmongo.GMongo
 
-    def mongo = new GMongo()
-    def db = mongo.getDB("gmongo")
+def mongo = new GMongo()
+def db = mongo.getDB("gmongo")
 
-    def words = ['foo', 'bar', 'baz']
-    def rand  = new Random()		
+def words = ['foo', 'bar', 'baz']
+def rand  = new Random()		
 
-    1000.times { 
-        db.words << [word: words[rand.nextInt(3)]]
+1000.times { 
+    db.words << [word: words[rand.nextInt(3)]]
+}
+
+assert db.words.count() == 1000
+
+def result = db.words.mapReduce(
+    """
+    function map() {
+        emit(this.word, {count: 1})
     }
+    """,
+    """
+    function reduce(key, values) {
+        var count = 0
+        for (var i = 0; i < values.length; i++)
+            count += values[i].count
+        return {count: count}
+    }
+    """,
+    "mrresult",
+    [:] // No Query
+)
 
-    assert db.words.count() == 1000
-
-    def result = db.words.mapReduce(
-        """
-        function map() {
-            emit(this.word, {count: 1})
-        }
-        """,
-        """
-        function reduce(key, values) {
-            var count = 0
-            for (var i = 0; i < values.length; i++)
-                count += values[i].count
-            return {count: count}
-        }
-        """,
-        "mrresult",
-        [:] // No Query
-    )
-
-    assert db.mrresult.count() == 3
-    assert db.mrresult.find()*.value*.count.sum() == 1000
-
+assert db.mrresult.count() == 3
+assert db.mrresult.find()*.value*.count.sum() == 1000
+```
 ## Grouping
 
 Grouping can also be achieved. Example:
 
-    @Grab("com.gmongo:gmongo:0.8")
-    import com.gmongo.GMongo
+```groovy
+@Grab("com.gmongo:gmongo:0.8")
+import com.gmongo.GMongo
 
-    def gmongo = new GMongo("localhost:27017")
+def gmongo = new GMongo("localhost:27017")
 
-    def db = gmongo.getDB("test")
+def db = gmongo.getDB("test")
 
-    db.clicks.drop()
+db.clicks.drop()
 
-    db.clicks.insert(day: 1, total: 10)
-    db.clicks.insert(day: 1, total: 14)
-    db.clicks.insert(day: 2, total: 45)
-    db.clicks.insert(day: 1, total:  9)
-    db.clicks.insert(day: 3, total: 32)
-    db.clicks.insert(day: 2, total: 11)
-    db.clicks.insert(day: 3, total: 34)
+db.clicks.insert(day: 1, total: 10)
+db.clicks.insert(day: 1, total: 14)
+db.clicks.insert(day: 2, total: 45)
+db.clicks.insert(day: 1, total:  9)
+db.clicks.insert(day: 3, total: 32)
+db.clicks.insert(day: 2, total: 11)
+db.clicks.insert(day: 3, total: 34)
 
-    def result = db.clicks.group([day: true], [:], [count: 0], "function(doc, out) { out.count += doc.total }")
-    
-    // Will output [[day:1.0, count:33.0], [day:2.0, count:56.0], [day:3.0, count:66.0]]
-    println result
+def result = db.clicks.group([day: true], [:], [count: 0], "function(doc, out) { out.count += doc.total }")
+
+// Will output [[day:1.0, count:33.0], [day:2.0, count:56.0], [day:3.0, count:66.0]]
+println result
+```
 
 And a more advanced grouping using 'keyf':
 
-    @Grab("com.gmongo:gmongo:0.8")
-    import com.gmongo.GMongo
+```groovy
+@Grab("com.gmongo:gmongo:0.8")
+import com.gmongo.GMongo
 
-    def gmongo = new GMongo("localhost:27017")
+def gmongo = new GMongo("localhost:27017")
 
-    def db = gmongo.getDB("test")
+def db = gmongo.getDB("test")
 
-    db.clicks.drop()
+db.clicks.drop()
 
-    db.clicks.insert(day: 1, total: 10)
-    db.clicks.insert(day: 1, total: 14)
-    db.clicks.insert(day: 2, total: 45)
-    db.clicks.insert(day: 1, total:  9)
-    db.clicks.insert(day: 3, total: 32)
-    db.clicks.insert(day: 2, total: 11)
-    db.clicks.insert(day: 3, total: 34)
+db.clicks.insert(day: 1, total: 10)
+db.clicks.insert(day: 1, total: 14)
+db.clicks.insert(day: 2, total: 45)
+db.clicks.insert(day: 1, total:  9)
+db.clicks.insert(day: 3, total: 32)
+db.clicks.insert(day: 2, total: 11)
+db.clicks.insert(day: 3, total: 34)
 
-    def keyf = "function(clicks) { return clicks.day % 2 ? { odd: true } : { even: true } }"
+def keyf = "function(clicks) { return clicks.day % 2 ? { odd: true } : { even: true } }"
 
-    def command = ['$keyf': keyf, cond: [:], initial: [count: 0], $reduce: "function(doc, out) { out.count += doc.total }"]
+def command = ['$keyf': keyf, cond: [:], initial: [count: 0], $reduce: "function(doc, out) { out.count += doc.total }"]
 
-    def result = db.clicks.group(command)
-    
-    // Will output [[odd:true, count:99.0], [even:true, count:56.0]]
-    println result  
+def result = db.clicks.group(command)
 
+// Will output [[odd:true, count:99.0], [even:true, count:56.0]]
+println result  
+```
 
 # Build
 
