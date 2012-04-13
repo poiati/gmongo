@@ -27,7 +27,7 @@ Sample:
 
 ```groovy
 // To download GMongo on the fly and put it at classpath
-@Grab(group='com.gmongo', module='gmongo', version='0.8')
+@Grab(group='com.gmongo', module='gmongo', version='0.9.5')
 import com.gmongo.GMongo
 // Instantiate a com.gmongo.GMongo object instead of com.mongodb.Mongo
 // The same constructors and methods are available here
@@ -101,7 +101,7 @@ db.inRequest {
 
 ## Sorting and Pagination
 ```groovy
-@Grab(group='com.gmongo', module='gmongo', version='0.8')
+@Grab(group='com.gmongo', module='gmongo', version='0.9.5')
 import com.gmongo.GMongo
 
 def mongo = new GMongo()
@@ -133,7 +133,7 @@ while (at < total) {
     
 ## MapReduce
 ```groovy
-@Grab(group='com.gmongo', module='gmongo', version='0.8')
+@Grab(group='com.gmongo', module='gmongo', version='0.9.5')
 import com.gmongo.GMongo
 
 def mongo = new GMongo()
@@ -174,7 +174,7 @@ assert db.mrresult.find()*.value*.count.sum() == 1000
 Grouping can also be achieved. Example:
 
 ```groovy
-@Grab("com.gmongo:gmongo:0.8")
+@Grab("com.gmongo:gmongo:0.9.5")
 import com.gmongo.GMongo
 
 def gmongo = new GMongo("localhost:27017")
@@ -200,7 +200,7 @@ println result
 And a more advanced grouping using 'keyf':
 
 ```groovy
-@Grab("com.gmongo:gmongo:0.8")
+@Grab("com.gmongo:gmongo:0.9.5")
 import com.gmongo.GMongo
 
 def gmongo = new GMongo("localhost:27017")
