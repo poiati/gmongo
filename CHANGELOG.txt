@@ -1,3 +1,6 @@
+* 1.0.0
+  - Now using Groovy version 2.0
+  - Now using mongo-java-driver version 2.8
 * 0.9.5
   - Upgraded to mongo-java-driver version 2.7.3
 * 0.9.4
