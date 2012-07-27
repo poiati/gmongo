@@ -3,11 +3,14 @@ apply plugin: 'maven'
 apply plugin: 'eclipse'
 apply plugin: 'signing'
 
-group = 'com.gmongo'
 version = '1.0'
-artifact = 'gmongo'
 
-bundleDir = "$buildDir/bundle"
+project.ext {
+  group = 'com.gmongo'
+  artifact = 'gmongo'
+
+  bundleDir = "$buildDir/bundle"
+}
 
 repositories {
   mavenCentral()
@@ -15,35 +18,38 @@ repositories {
 
 dependencies {
   groovy group: 'org.codehaus.groovy', name: 'groovy', version: '2.0.1'
-  compile group: 'org.codehaus.groovy', name: 'groovy-test', version: '2.0.1'
+  groovy group: 'org.codehaus.groovy', name: 'groovy-ant', version: '2.0.1'
   compile group: 'org.mongodb', name: 'mongo-java-driver', version: '2.8.0'
+
+  testCompile group: 'org.codehaus.groovy', name: 'groovy-test', version: '2.0.1'
   testCompile group: 'junit', name: 'junit', version: '4.10'
 }
 
 task source << {
-  ant.jar(destfile: "$buildDir/$artifact-${version}-sources.jar") {
+  ant.jar(destfile: "$buildDir/${project.ext.artifact}-${version}-sources.jar") {
     fileset (dir: 'src/main/groovy', includes: '**/*.groovy')
   }
 }
 
 task prepareBundle(dependsOn: [ 'build', 'source', 'groovydoc', 'pom' ]) << {
-  ant.copy(file: "$buildDir/libs/$artifact-${version}.jar", todir: bundleDir)
-  ant.copy(file: "$buildDir/$artifact-$version-sources.jar", todir: bundleDir)
-  ant.copy(file: "$buildDir/pom.xml", todir: bundleDir)
-  ant.jar(destfile: "$bundleDir/$artifact-$version-javadoc.jar") {
+  ant.copy(file: "$buildDir/libs/${project.ext.artifact}-${version}.jar", todir: project.ext.bundleDir)
+  ant.copy(file: "$buildDir/${project.ext.artifact}-${version}-sources.jar", todir: project.ext.bundleDir)
+  ant.copy(file: "$buildDir/pom.xml", todir: project.ext.bundleDir)
+  ant.jar(destfile: "${project.ext.bundleDir}/${project.ext.artifact}-${version}-javadoc.jar") {
     fileset (dir: "$buildDir/docs/groovydoc")
   }
-  sign(new File(bundleDir).listFiles());
+  sign(new File(project.ext.bundleDir).listFiles());
 }
 
 task packBundle << {
-  ant.jar(destfile: "$bundleDir/$artifact-$version-bundle.jar", basedir: new File(bundleDir))
+  ant.jar(destfile: "${project.ext.bundleDir}/${project.ext.artifact}-${version}-bundle.jar", basedir: new File(project.ext.bundleDir))
 }
 
 task pom << {
   pom {
     project {
-      name artifact
+      groupId project.ext.group
+      artifactId project.ext.artifact
       description 'Mongodb for Groovy'
       url 'http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/'
       licenses {
