@@ -23,7 +23,7 @@ class DBCollectionPatcher {
   static final PATCHED_METHODS = [ 
     'insert', 'find', 'findOne', 'findAndModify', 'findAndRemove', 'remove', 'save', 'count', 'update', 
     'updateMulti', 'distinct', 'apply', 'createIndex', 'ensureIndex',
-    'mapReduce', 'dropIndex', 'getCount', 'group', 'setHintFields'
+    'mapReduce', 'dropIndex', 'getCount', 'group', 'setHintFields', 'aggregate'
   ]
 
   static final ALIAS = [
