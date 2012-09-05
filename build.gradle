@@ -50,6 +50,7 @@ task pom << {
     project {
       groupId project.ext.group
       artifactId project.ext.artifact
+      name 'gmongo'
       description 'Mongodb for Groovy'
       url 'http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/'
       licenses {
