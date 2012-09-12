@@ -229,7 +229,10 @@ println result
 
 # Aggregation
 
-This features is only available in version 1.0 or greather.
+This features is only available in version 1.0 or greater.
+
+The simple example bellow will get the name of all the cities with
+population greater or equal 10.000 and sort it.
 
 ```groovy
 @Grab("com.gmongo:gmongo:1.0")
@@ -244,7 +247,7 @@ db.zipcodes << ["city": "ACMAR", "loc": [-86.51557F, 33.584132F], "pop": 6055, "
 db.zipcodes << ["city": "ADAMSVILLE", "loc": [-86.959727F, 33.588437F], "pop": 10616, "state": "AL", "_id": "35005"]
 db.zipcodes << ["city": "ADGER", "loc": [-87.167455F, 33.434277F], "pop": 3205, "state": "AL", "_id": "35006"]
 db.zipcodes << ["city": "KEYSTONE", "loc": [-86.812861F, 33.236868F], "pop": 14218, "state": "AL", "_id": "35007"]
-  db.zipcodes << ["city": "NEW SITE", "loc": [-85.951086F, 32.941445F], "pop": 19942, "state": "AL", "_id": "35010"]
+db.zipcodes << ["city": "NEW SITE", "loc": [-85.951086F, 32.941445F], "pop": 19942, "state": "AL", "_id": "35010"]
 
 def aggrOutput = db.zipcodes.aggregate([ 
     $project : [ city: 1, pop: 1 ] 
@@ -256,6 +259,11 @@ def aggrOutput = db.zipcodes.aggregate([
     $sort: [ pop: -1] 
   ]
 )
+
+assert aggrOutput.results().size() == 3
+assert aggrOutput.results()[0].city == "NEW SITE"
+assert aggrOutput.results()[1].city == "KEYSTONE"
+assert aggrOutput.results()[2].city == "ADAMSVILLE"
 ```
 
 An amazing documentation about Aggregation can be found in the MongoDB
