@@ -231,7 +231,7 @@ println result
 
 This features is only available in version 1.0 or greater.
 
-The simple example bellow will get the name of all the cities with
+The simple example below will get the name of all the cities with
 population greater or equal 10.000 and sort it.
 
 ```groovy
