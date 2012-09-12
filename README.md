@@ -27,7 +27,7 @@ Sample:
 
 ```groovy
 // To download GMongo on the fly and put it at classpath
-@Grab(group='com.gmongo', module='gmongo', version='0.9.5')
+@Grab(group='com.gmongo', module='gmongo', version='1.0')
 import com.gmongo.GMongo
 // Instantiate a com.gmongo.GMongo object instead of com.mongodb.Mongo
 // The same constructors and methods are available here
@@ -101,7 +101,7 @@ db.inRequest {
 
 ## Sorting and Pagination
 ```groovy
-@Grab(group='com.gmongo', module='gmongo', version='0.9.5')
+@Grab(group='com.gmongo', module='gmongo', version='1.0')
 import com.gmongo.GMongo
 
 def mongo = new GMongo()
@@ -133,7 +133,7 @@ while (at < total) {
     
 ## MapReduce
 ```groovy
-@Grab(group='com.gmongo', module='gmongo', version='0.9.5')
+@Grab(group='com.gmongo', module='gmongo', version='1.0')
 import com.gmongo.GMongo
 
 def mongo = new GMongo()
@@ -174,7 +174,7 @@ assert db.mrresult.find()*.value*.count.sum() == 1000
 Grouping can also be achieved. Example:
 
 ```groovy
-@Grab("com.gmongo:gmongo:0.9.5")
+@Grab("com.gmongo:gmongo:1.0")
 import com.gmongo.GMongo
 
 def gmongo = new GMongo("localhost:27017")
@@ -200,7 +200,7 @@ println result
 And a more advanced grouping using 'keyf':
 
 ```groovy
-@Grab("com.gmongo:gmongo:0.9.5")
+@Grab("com.gmongo:gmongo:1.0")
 import com.gmongo.GMongo
 
 def gmongo = new GMongo("localhost:27017")
@@ -226,6 +226,40 @@ def result = db.clicks.group(command)
 // Will output [[odd:true, count:99.0], [even:true, count:56.0]]
 println result  
 ```
+
+# Aggregation
+
+This features is only available in version 1.0 or greather.
+
+```groovy
+@Grab("com.gmongo:gmongo:1.0")
+import com.gmongo.GMongo
+
+def gmongo = new GMongo("localhost:27017")
+
+def db = gmongo.getDB("test")
+
+db.zipcodes.drop()
+db.zipcodes << ["city": "ACMAR", "loc": [-86.51557F, 33.584132F], "pop": 6055, "state": "AL", "_id": "35004"]
+db.zipcodes << ["city": "ADAMSVILLE", "loc": [-86.959727F, 33.588437F], "pop": 10616, "state": "AL", "_id": "35005"]
+db.zipcodes << ["city": "ADGER", "loc": [-87.167455F, 33.434277F], "pop": 3205, "state": "AL", "_id": "35006"]
+db.zipcodes << ["city": "KEYSTONE", "loc": [-86.812861F, 33.236868F], "pop": 14218, "state": "AL", "_id": "35007"]
+  db.zipcodes << ["city": "NEW SITE", "loc": [-85.951086F, 32.941445F], "pop": 19942, "state": "AL", "_id": "35010"]
+
+def aggrOutput = db.zipcodes.aggregate([ 
+    $project : [ city: 1, pop: 1 ] 
+  ],
+  [ 
+    $match : [ pop: [ $gte : 10 * 1000 ] ] 
+  ],
+  [ 
+    $sort: [ pop: -1] 
+  ]
+)
+```
+
+An amazing documentation about Aggregation can be found in the MongoDB
+website: http://docs.mongodb.org/manual/applications/aggregation/ .
 
 # Build
 
