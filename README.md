@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/[YOUR_GITHUB_USERNAME]/[YOUR_PROJECT_NAME].png)](https://travis-ci.org/[YOUR_GITHUB_USERNAME]/[YOUR_PROJECT_NAME])
+
 # Goal
 
 The goal of this project is to provide a more simple, easy to use and less verbose API to work with mongodb using the Groovy programming language.
