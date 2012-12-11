@@ -12,6 +12,9 @@ More information can be found here: http://blog.paulopoiati.com.
 com.gmongo.GMongo doesn't extends com.mongodb.Mongo. It delegate all methods calls to a Mongo instance. If
 you need to get the Mongo reference just call com.gmongo.GMongo#getMongo.
 
+You can also use `com.gmongo.GMongoClient`. It has the same constructors
+as `com.mongodb.MongoClient`
+
 Sample:
 
 ```groovy
