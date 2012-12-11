@@ -1,3 +1,5 @@
+* 1.1
+  - Added support to com.mongodb.MongoClient
 * 1.0.0
   - Support for DBCollection#aggregate method
   - Now using Groovy version 2.0.1
