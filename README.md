@@ -1,24 +1,11 @@
-[![Build Status](https://travis-ci.org/poiati/gmongo.png)](https://travis-ci.org/poiati/gmongo)
+GMongo 
+======
 
-# Goal
+[![Build Status](https://travis-ci.org/poiati/gmongo.png)](https://travis-ci.org/poiati/gmongo)
 
 The goal of this project is to provide a more simple, easy to use and less verbose API to work with mongodb using the Groovy programming language.
 
 More information can be found here: http://blog.paulopoiati.com.
-
-# Support
-
-Any bug, suggestion or ... whatever.
-
-Email: paulogpoiati@gmail.com
-
-Twitter: http://twitter.com/poiati
-
-# Maven
-
-All versions of the project can be found in the maven central repository:
-
-    http://repo1.maven.org/maven2/com/gmongo/gmongo/
 
 # Usage
 
@@ -270,6 +257,21 @@ assert aggrOutput.results()[2].city == "ADAMSVILLE"
 
 An amazing documentation about Aggregation can be found in the MongoDB
 website: http://docs.mongodb.org/manual/applications/aggregation/ .
+
+# Support
+
+Any bug, suggestion or ... whatever.
+
+Email: paulogpoiati@gmail.com
+
+Twitter: http://twitter.com/poiati
+
+# Maven
+
+All versions of the project can be found in the maven central repository:
+
+    http://repo1.maven.org/maven2/com/gmongo/gmongo/
+
 
 # Build
 
