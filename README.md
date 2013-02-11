@@ -5,7 +5,7 @@ GMongo
 
 The goal of this project is to provide a more simple, easy to use and less verbose API to work with mongodb using the Groovy programming language.
 
-More information can be found here: http://blog.paulopoiati.com.
+More information can be found here: http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/.
 
 # Usage
 
@@ -264,6 +264,8 @@ website: http://docs.mongodb.org/manual/applications/aggregation/ .
 # Support
 
 Any bug, suggestion or ... whatever.
+
+Blog: http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/.
 
 Email: paulogpoiati@gmail.com
 
