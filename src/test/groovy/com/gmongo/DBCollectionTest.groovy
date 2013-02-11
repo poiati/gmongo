@@ -204,6 +204,20 @@ class DBCollectionTest extends IntegrationTestCase {
     assert 1 == db.foo.count()
     assert 30 == db.foo.findOne().baz
   }
+
+  void testFindAndModifyReturnOldDocument() {
+    db.foo << [foo: 10, bar: 20]
+    def oldDocument = db.foo.findAndModify([foo: 10], ['$set': [bar: 30]])
+    
+    assert 20 == oldDocument.bar
+  }
+
+  void testFindAndModifyReturnNewDocument() {
+    db.foo << [foo: 10, bar: 30]
+    def newDocument = db.foo.findAndModify([foo: 10], [:], [:], false, ['$set': [bar: 30]], true, false)
+    
+    assert 30 == newDocument.bar
+  }
   
   void testFindAndRemove() {
     db.foo << [foo: 10, baz: 40]
