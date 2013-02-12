@@ -213,7 +213,7 @@ class DBCollectionTest extends IntegrationTestCase {
   }
 
   void testFindAndModifyReturnNewDocument() {
-    db.foo << [foo: 10, bar: 30]
+    db.foo << [foo: 10, bar: 20]
     def newDocument = db.foo.findAndModify([foo: 10], [:], [:], false, ['$set': [bar: 30]], true, false)
     
     assert 30 == newDocument.bar
