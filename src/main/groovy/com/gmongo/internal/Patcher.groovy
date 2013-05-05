@@ -55,8 +55,10 @@ class Patcher {
     def other = additionalMethods[nameOrAlias]
     if (other == null)
       throw new MissingMethodException(nameOrAlias, target.class, args)
-    other.delegate = target
-    return other
+    // Prevent race condition on the delegate
+    def copy = other.clone()
+    copy.delegate = target
+    return copy
   }
 
   static _convert(args) {
