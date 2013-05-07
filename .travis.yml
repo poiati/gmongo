@@ -1,3 +1,7 @@
 language: Groovy
 services:
   - mongodb
+
+branches:
+  only:
+    - master
