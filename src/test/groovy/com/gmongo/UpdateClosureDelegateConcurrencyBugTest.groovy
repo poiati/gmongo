@@ -10,6 +10,10 @@ class UpdateClosureDelegateConcurrencyBugTest extends IntegrationTestCase {
     db.dropDatabase()
   }
 
+  void tearDown() {
+    db.dropDatabase()
+  }
+
   void testBehaviorOnHighLoad() {
     def startedAt = System.currentTimeMillis()
     def runUntil = startedAt + (100 * 60)
@@ -18,8 +22,8 @@ class UpdateClosureDelegateConcurrencyBugTest extends IntegrationTestCase {
     6.times {
       def thread = Thread.start {
         while (true) {
-          db.foo.update([nomatch: 1], [collection: 'foo'], true)
-          db.bar.update([nomatch: 1], [collection: 'bar'], true)
+          db.one.update([nomatch: 1], [collection: 'one'], true)
+          db.two.update([nomatch: 1], [collection: 'two'], true)
 
           if (System.currentTimeMillis() > runUntil)
             break;
@@ -31,10 +35,10 @@ class UpdateClosureDelegateConcurrencyBugTest extends IntegrationTestCase {
 
     threads.each { it.join() }
 
-    println db.foo.count() + " elements in foo."
-    println db.bar.count() + " elements in bar."
+    println db.one.count() + " elements in one."
+    println db.two.count() + " elements in two."
 
-    assertNull "Found 'bar' in the 'foo' collection", db.foo.findOne(collection: 'bar')
-    assertNull "Found 'foo' in the 'bar' collection", db.bar.findOne(collection: 'foo')
+    assertNull "Found 'two' in the 'one' collection", db.one.findOne(collection: 'two')
+    assertNull "Found 'one' in the 'two' collection", db.two.findOne(collection: 'one')
   }
 }
