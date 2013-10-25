@@ -20,6 +20,9 @@ import com.mongodb.MongoOptions
 import com.mongodb.MongoURI
 import com.mongodb.MongoClientURI
 import com.mongodb.MongoClientOptions
+import com.mongodb.MongoCredential
+import com.mongodb.MongoCredentialsStore
+import com.mongodb.MongoAuthority
 
 class GMongoClient extends GMongo {
 
@@ -43,20 +46,37 @@ class GMongoClient extends GMongo {
     this(addr, new MongoClientOptions.Builder().build());
   }
 
+  GMongoClient(ServerAddress addr, List<MongoCredential> credentialsList) {
+    this(addr, credentialsList, new MongoClientOptions.Builder().build());
+  }
+
   GMongoClient(ServerAddress addr, MongoClientOptions options) {
     super(addr, new MongoOptions(options));
+  }
+
+  GMongoClient(ServerAddress addr, List<MongoCredential> credentialsList, MongoClientOptions options) {
+    this(MongoAuthority.direct(addr, new MongoCredentialsStore(credentialsList)), new MongoOptions(options));
+    this.options = options;
   }
 
   GMongoClient(List<ServerAddress> seeds) {
     this(seeds, new MongoClientOptions.Builder().build());
   }
 
+  GMongoClient(List<ServerAddress> seeds, List<MongoCredential> credentialsList) {
+    this(seeds, credentialsList, new MongoClientOptions.Builder().build());
+  }
+
   GMongoClient(List<ServerAddress> seeds, MongoClientOptions options) {
     super(seeds, new MongoOptions(options));
+  }
+
+  GMongoClient(List<ServerAddress> seeds, List<MongoCredential> credentialsList, MongoClientOptions options) {
+    this(MongoAuthority.dynamicSet(seeds, new MongoCredentialsStore(credentialsList)), new MongoOptions(options));
+    this.options = options;
   }
 
   GMongoClient(MongoClientURI uri) {
     super(new MongoURI(uri));
   }
-
 }
