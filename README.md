@@ -13,7 +13,21 @@ com.gmongo.GMongo doesn't extends com.mongodb.Mongo. It delegate all methods cal
 you need to get the Mongo reference just call com.gmongo.GMongo#getMongo.
 
 You can also use `com.gmongo.GMongoClient`. It has the same constructors
-as `com.mongodb.MongoClient`
+as `com.mongodb.MongoClient`. For example, to connect to a MongoDB instance with auth enabled.
+
+```groovy
+@Grab(group='com.gmongo', module='gmongo', version='1.3')
+
+import com.gmongo.GMongoClient
+import com.mongodb.MongoCredential
+import com.mongodb.ServerAddress
+
+credentials = MongoCredential.createMongoCRCredential('username', 'database', 'password' as char[])
+
+client = new GMongoClient(new ServerAddress(), [credentials])
+```
+
+Auth is only available in GMongo 1.3 and above.
 
 Sample:
 
