@@ -24,11 +24,6 @@ class GMongoClientTest extends IntegrationTestCase {
     assert db.hasProperty(Patcher.PATCH_MARK)
   }
 
-  void testStaticConnect() {
-    def db2 = GMongoClient.connect(new DBAddress('localhost', 27017, DB_NAME))
-    assert db2.hasProperty(Patcher.PATCH_MARK)
-  }
-
   void testMongoURIConstructor() {
     def mongo = new GMongoClient(new MongoClientURI('mongodb://127.0.0.1'))
     assert mongo.getDB(DB_NAME).hasProperty(Patcher.PATCH_MARK)
