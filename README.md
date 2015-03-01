@@ -29,6 +29,8 @@ client = new GMongoClient(new ServerAddress(), [credentials])
 
 Auth is only available in GMongo 1.3 and above.
 
+(*If you are using Mongodb 3.x you need to use `MongoCredential#createCredential` instead*)
+
 Sample:
 
 ```groovy
