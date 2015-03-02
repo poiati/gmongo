@@ -26,69 +26,58 @@ import com.mongodb.DB
 
 import com.gmongo.internal.DBPatcher
 
-class GMongoClient {
-
-  @Delegate
-  MongoClient mongoClient;
+class GMongoClient extends GMongo {
 
   GMongoClient() {
-    this.mongoClient = new MongoClient(new ServerAddress())
+    this.mongo = new MongoClient(new ServerAddress())
   }
 
   GMongoClient(String host) {
-    this.mongoClient = new MongoClient(new ServerAddress(host))
+    this.mongo = new MongoClient(new ServerAddress(host))
   }
 
   GMongoClient(String host, MongoClientOptions options) {
-    this.mongoClient = new MongoClient(new ServerAddress(host), options)
+    this.mongo = new MongoClient(new ServerAddress(host), options)
   }
 
   GMongoClient(String host, int port) {
-    this.mongoClient = new MongoClient(new ServerAddress(host, port));
+    this.mongo = new MongoClient(new ServerAddress(host, port));
   }
 
   GMongoClient(ServerAddress addr) {
-    this.mongoClient = new MongoClient(addr, new MongoClientOptions.Builder().build());
+    this.mongo = new MongoClient(addr, new MongoClientOptions.Builder().build());
   }
 
   GMongoClient(ServerAddress addr, MongoClientOptions options) {
-    this.mongoClient = new MongoClient(addr, new MongoOptions(options));
+    this.mongo = new MongoClient(addr, new MongoOptions(options));
   }
 
   GMongoClient(List<ServerAddress> seeds) {
-    this.mongoClient = new MongoClient(seeds, new MongoClientOptions.Builder().build());
+    this.mongo = new MongoClient(seeds, new MongoClientOptions.Builder().build());
   }
 
   GMongoClient(List<ServerAddress> seeds, List<MongoCredential> credentialsList) {
-    this.mongoClient = new MongoClient(seeds, credentialsList);
+    this.mongo = new MongoClient(seeds, credentialsList);
   }
 
   GMongoClient(List<ServerAddress> seeds, List<MongoCredential> credentialsList, MongoClientOptions options) {
-    this.mongoClient = new MongoClient(seeds, credentialsList, options);
+    this.mongo = new MongoClient(seeds, credentialsList, options);
   }
 
   GMongoClient(List<ServerAddress> seeds, MongoClientOptions options) {
-    this.mongoClient = new MongoClient(seeds, new MongoOptions(options));
+    this.mongo = new MongoClient(seeds, new MongoOptions(options));
   }
 
   GMongoClient(MongoClientURI uri) {
-    this.mongoClient = new MongoClient(uri);
+    this.mongo = new MongoClient(uri);
   }
 
   GMongoClient(ServerAddress addr, List<MongoCredential> credentialsList) {
-    this.mongoClient = new MongoClient(addr, credentialsList);
+    this.mongo = new MongoClient(addr, credentialsList);
   }
 
   GMongoClient(ServerAddress addr, List<MongoCredential> credentialsList, MongoClientOptions options) {
-    this.mongoClient = new MongoClient(addr, credentialsList, options);
-  }
-
-  DB getDB(String name) {
-    patchAndReturn mongoClient.getDB(name)
-  }
-
-  static private patchAndReturn(db) {
-    DBPatcher.patch(db); return db
+    this.mongo = new MongoClient(addr, credentialsList, options);
   }
 
 }

@@ -2,8 +2,10 @@ apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 apply plugin: 'signing'
+apply plugin: 'maven-publish'
 
-version = '1.4'
+group = 'com.gmongo'
+version = '1.5'
 
 project.ext {
   group = 'com.gmongo'
@@ -18,8 +20,13 @@ repositories {
 }
 
 dependencies {
+<<<<<<< HEAD
   compile group: 'org.codehaus.groovy', name: 'groovy', version: project.ext.groovyVersion
   compile group: 'org.codehaus.groovy', name: 'groovy-ant', version: project.ext.groovyVersion
+=======
+  groovy group: 'org.codehaus.groovy', name: 'groovy', version: project.ext.groovyVersion
+  groovy group: 'org.codehaus.groovy', name: 'groovy-ant', version: project.ext.groovyVersion
+>>>>>>> makign gmongoclient extend gmongo to fix grails mongodb plugin not workign with auth and 2.6+
   compile group: 'org.mongodb', name: 'mongo-java-driver', version: '2.13.0'
 
   testCompile group: 'org.codehaus.groovy', name: 'groovy-test', version: project.ext.groovyVersion
