@@ -1,3 +1,6 @@
+* 1.5
+	- GMongoClient now extends GMongo for better compatibility with
+	mongodb-java-driver
 * 1.4
   - Support to mongodb 3.0
   - Now using Groovy 2.4.1.

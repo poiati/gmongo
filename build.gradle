@@ -55,7 +55,7 @@ task pom << {
       artifactId project.ext.artifact
       name 'gmongo'
       description 'Mongodb for Groovy'
-      url 'http://blog.paulopoiati.com/2010/06/20/gmongo-0-5-released/'
+      url 'https://github.com/poiati/gmongo'
       licenses {
         license {
           name 'The Apache Software License, Version 2.0'
