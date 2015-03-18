@@ -41,7 +41,7 @@ task prepareBundle(dependsOn: [ 'build', 'source', 'groovydoc', 'pom' ]) << {
   ant.jar(destfile: "${project.ext.bundleDir}/${project.ext.artifact}-${version}-javadoc.jar") {
     fileset (dir: "$buildDir/docs/groovydoc")
   }
-  sign(new File(project.ext.bundleDir).listFiles());
+  signing.sign(new File(project.ext.bundleDir).listFiles())
 }
 
 task packBundle << {
